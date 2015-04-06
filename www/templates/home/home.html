@@ -1,0 +1,47 @@
+<ion-view title="füdie">
+ 	<ion-content class="home">
+  		<ion-refresher pulling-text="" on-refresh="doRefresh()" pulling-icon="" spinner="dots">
+  		</ion-refresher>
+    
+      	<div class="home-item" ng-repeat="item in feed | orderBy: 'action.date':true" >
+
+	      	<div class="home-recipe-section">
+
+	      		<div class="home-recipe-bg-image" style="background: url('{{item.recipe.image}}') no-repeat center; background-size:cover; width: 100%;">
+	      		</div>
+
+	      		<div class="recipe-overlay">
+	      		</div>
+
+		      	<div class="home-action-section">
+		      	    <p><a href="#/tab/{{tab}}/user/{{item.action.username}}/recipe-book">{{item.action.username}}</a> <small>{{item.action.phrase}}:</small></p>
+		      	</div>
+	      	
+		        <div class="recipe-info">
+					<a href="#/tab/home-recipe/{{item.recipe._id}}"><h2 class="recipe-name">{{item.recipe.name}}</h2></a>
+				</div>
+			
+				<div class="list-manage">
+					<a class="a button button-round button-light button-small" activate-fork-list ng-click="addToTryList(item.recipe)"><i class="icon ion-fork"></i></a>
+					<div class="stats">
+						<ul>
+							<li>
+								<h3>{{item.recipe.stats.forks}}</h3>
+								<p>Forks</p>
+							</li>
+							<li>
+								<h3>{{item.recipe.stats.books}}</h3>
+								<p>Books</p>
+							</li>
+							<li>
+								<a href="#/tab/{{tab}}/comments_{{item.recipe._id}}"><h3>{{item.recipe.comments.length}}</h3></a>
+								<p>Comments</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+      	</div>
+  	</ion-content>
+</ion-view>

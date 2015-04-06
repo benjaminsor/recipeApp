@@ -1,0 +1,19 @@
+<ion-list class="recipes smallList">
+	<label class="item item-input rbSearch">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" class="form-control" placeholder="Search Forks" ng-model="search.$">
+	</label>
+	<ion-item class="card" ng-repeat="recipe in recipes | filter: search " href="#/tab/{{tab}}-recipe/{{recipe._id}}">
+		<div class="row">
+			<div class="col">
+				<div class="recipe-image-container">
+					<img class="recipe-image" src="{{recipe.image}}">
+				</div>
+			</div>
+			<div class="col">
+				<h2>{{recipe.name}}</h2>
+				<a href="#/tab/user/{{recipe.username}}/recipe-book">{{recipe.username}}</a>
+			</div>
+		</div>
+	</ion-item>
+</ion-list>

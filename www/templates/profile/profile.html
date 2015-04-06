@@ -1,0 +1,44 @@
+
+<div class="profile">
+	<ion-view title="{{user.username}}">
+		<ion-nav-buttons side="right" >
+	      	<button ng-if="me" class="button button-light button-clear" ng-click="openMenu($event)"><i class="icon ion-android-more-vertical"></i></button>
+		</ion-nav-buttons>
+
+  		<ion-content>
+
+  			<div class="row">
+	  			<div class="col">
+	  				<div class="userImage" ng-bind-html="user.image"></div>
+	  				<div class="userInfo">
+	  					<div class="row">
+		  					<div class="col">
+				  				<h5>{{user.firstName}} {{user.lastName}}</h5>
+				  			</div>
+				  			<div class="col">
+				  				<button ng-click="follow()" ng-if="!me" ng-hide="following" class="button button-balanced button-small button-block">Follow</button>
+				  				<button ng-click="unfollow()" ng-if="!me" ng-show="following" class="button button-stable button-outline button-small button-block">Unfollow</button>
+				  			</div>
+			  			</div>
+			  			<div class="row">
+				  			<div class="col">
+				  				<p><i>{{user.description}}</i></p>
+				  			</div>
+			  			</div>
+		  			</div>
+	  			</div>
+  			</div>
+	  	
+	  		<div class="button-bar">
+	  			<a active-state="recipeBook" href="#/tab/{{tab}}/user/{{user.username}}/recipe-book" class="button button-clear button-balanced"><i class="icon ion-ios-book"></i></a>
+	  			<a active-state="tryList" href="#/tab/{{tab}}/user/{{user.username}}/try-list" class="button button-clear button-balanced"><i class="icon ion-fork"></i></a>
+	  		</div>
+	  		
+	  		<div ui-view name="profile-list">
+			</div>
+
+
+  		</ion-content>
+	</ion-view>
+</div>
+

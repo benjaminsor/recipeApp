@@ -1,0 +1,38 @@
+<ion-view title="{{recipe.name}}">
+  	<ion-content class="main-comments">
+
+		<div class="recipe-header">
+
+			<div class="recipe-bg-image" style="background: url('{{recipe.image}}') no-repeat center; background-size:cover; width: 100%;">
+			</div>
+
+			<div class="recipe-overlay">
+			</div>
+
+		</div>
+
+
+		<div class="row">
+			<div class="col">
+				<div class="page-header">
+					<h3>Comments:</h3>
+				</div>
+				<ul class="list comments">
+					<li ng-repeat="comment in recipe.comments" >
+						<div class="row">
+							<div class="col">
+									<p><a class="comment-user" href="#/tab/{{tab}}/user/{{comment.user}}/recipe-book">{{comment.user}}</a> <small>{{comment.content}}</small></p>
+							</div>
+							<div class="col col-10 hide" close-comment ng-click="removeComment(comment)">
+								<a><i class="icon ion-android-close"></i></a>
+							</div>
+						</div>
+					</li>
+					<label class="item item-input">
+						<input type="text" placeholder="Write a Comment..." ng-model="RData.newComment" ng-enter="addComment()">
+					</label>
+				</ul>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

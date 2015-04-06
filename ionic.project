@@ -1,0 +1,12 @@
+{
+  "name": "recipeApp",
+  "app_id": "2dfc2625",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}

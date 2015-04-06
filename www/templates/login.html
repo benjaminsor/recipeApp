@@ -1,0 +1,42 @@
+
+<ion-view hide-nav-bar="true" >
+  <div class="login-screen" >
+    <ion-content style="background: url('img/appBack1.jpg') no-repeat center right; background-size:cover;">
+      <div class="row">
+        <div class="col">
+          <h1 class="logo">füdie</h1>
+        </div>
+      </div>
+      <div class="row loginBox">
+        <div class="col">
+          <div>
+            <form ng-submit="login()">
+              <div>
+                <p class="assertive" ng-show="errorMessage">{{errorMessage}}</p>
+                <label class="item-input">
+                  <input type="text" placeholder="Username" ng-model="loginData.username">
+                </label>
+                <label class="item-input">
+                  <input type="password" placeholder="Password" ng-model="loginData.password">
+                </label>
+                <label>
+                  <button class="button button-block button-balanced" type="submit">Log in</button>
+                </label>
+              </div>
+            </form>
+            <div>
+                <p>Don't have a profile? <a href="#/create">Create one here.</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-content>
+  </div>
+</ion-view>
+
+<!-- 
+ToDo:
+
+-messaging
+
+ -->

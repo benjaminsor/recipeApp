@@ -1,0 +1,15 @@
+<ion-view title="Activity">
+  	<ion-content class="activity">
+  		<ul class="list">
+  			<li class="item item-button-right item-avatar" ng-repeat="item in activity | orderBy: 'date':true">
+				<img src="img/appBack1.jpg">
+				<p><a href="#/tab/{{tab}}/user/{{item.username}}/recipe-book"><strong>{{item.username}}</strong></a> {{item.phrase}}</p>
+				<h3><strong>{{item.recipe.name}}</strong></h3>
+				<a ng-if="item.action != 'FOLLOW'" href="#/tab/activity-recipe/{{item.recipe._id}}" class="button button-balanced button-clear">
+			      	<i class="icon ion-arrow-right-c"></i>
+			    </a>
+  			</li>
+  		</ul>
+	</ion-content>
+</ion-view>
+

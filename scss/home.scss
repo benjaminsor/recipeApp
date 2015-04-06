@@ -1,0 +1,113 @@
+.home-item {
+	width:100%;
+	position:relative;
+	border-bottom: 1px solid #fff;
+	max-width:500px;
+	margin:0 auto;
+}
+
+.home-recipe-section {
+	position:relative;
+}
+
+.home-recipe-bg-image {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+
+.recipe-overlay {
+	background: -moz-linear-gradient(top,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.65) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(40%,rgba(0,0,0,0)), color-stop(65%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0) 65%,rgba(0,0,0,0.65) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0) 65%,rgba(0,0,0,0.65) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0) 65%,rgba(0,0,0,0.65) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,0) 65%,rgba(0,0,0,0.65) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#80000000',GradientType=0 ); /* IE6-9 */
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+
+.home-action-section {
+	color:#bbb;
+	padding: 10px 10px 5px 10px;
+	z-index:10;
+	position:relative;
+}
+
+.home .recipe-info {
+	z-index:10;
+	position:relative;
+}
+
+.home .recipe-name {
+	color:$light;
+	font-size:180%;
+	font-weight:200;
+	margin:0 0 0 8px;
+	padding-bottom:200px;
+}
+
+.home .list-manage {
+	margin:0 0 0 0;
+	padding:10px 5px;
+	width:100%;
+	text-align:right;
+	z-index:10;
+	position:relative;
+}
+
+.home .list-manage .a {
+	padding:8px 10px;
+	margin-right:10px;
+	float: right;
+	margin-top:-2px;
+}
+
+.home .button.button-small {
+	box-shadow: 1px 1px 0px rgba(100, 100, 100, .6);
+	height:42px;
+	width:42px;
+}
+
+.home .button.button-small i:before {
+	font-size:28px;
+	text-shadow: 1px 1px 0px rgba(100, 100, 100, .6);
+}
+
+.home .button-light {
+	color:#ddd;
+	background: rgba(255,255,255,.2);
+}
+
+.home .button-light:hover {
+	color:#ddd;
+}
+
+.home .list-manage button {
+	display:inline-block;
+}
+
+.home .stats {
+	width: 80%;
+	text-align: left;
+	color: #fff;
+	padding: 0 10px;
+}
+
+.home .stats li {
+	display: inline-block;
+	text-align: left;
+	margin-right: 18px;
+}
+
+.home .stats li h3 {
+	margin:0;
+	color:$balanced;
+	font-size:140%;
+}

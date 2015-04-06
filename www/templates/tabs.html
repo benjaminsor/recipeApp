@@ -1,0 +1,24 @@
+
+<ion-tabs class="tabs-icon-only tabs-light">
+
+  <ion-tab icon-off="ion-ios-home-outline" icon-on="ion-ios-home" href="#/tab/home">
+    <ion-nav-view name="tab-home"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab icon-off="ion-ios-search" icon-on="ion-ios-search-strong" href="#/tab/search/recipes">
+    <ion-nav-view name="tab-search"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab icon-off="ion-ios-plus-outline" icon-on="ion-ios-plus" href="#/tab/add-new">
+    <ion-nav-view name="tab-addNew"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab badge="notifications" badge-style="badge-energized" icon-off="ion-ios-list-outline" icon-on="ion-ios-list" href="#/tab/activity">
+    <ion-nav-view name="tab-activity"></ion-nav-view>
+  </ion-tab>
+
+  <ion-tab icon-off="ion-ios-person-outline" icon-on="ion-ios-person" href="#/tab/profile/user/{{user.username}}/recipe-book">
+    <ion-nav-view name="tab-profile"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs>

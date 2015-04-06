@@ -1,0 +1,45 @@
+<ion-view hide-nav-bar="true">
+  <div class="login-screen">
+    <ion-content style="background: url('img/appBack1.jpg') no-repeat center right; background-size:cover;">
+    <div class="row loginBox create">
+      <div class="col">
+      <form ng-submit="createUser()">
+        
+          <label class="item-input">
+            <input type="text" placeholder="Username" ng-model="create.username" required>
+          </label>
+          <label class="item-input">
+            <input type="password" placeholder="Password" ng-model="create.password" required>
+          </label>
+          <label class="item-input">
+            <input type="text" placeholder="First Name" ng-model="create.firstName" required>
+          </label>
+          <label class="item-input">
+            <input type="text" placeholder="Last Name" ng-model="create.lastName" required>
+          </label>
+          <label class="item-input">
+            <input type="email" placeholder="Email" ng-model="create.email" required>
+          </label>
+          <label class="item-input">
+            <textarea placeholder="Description" ng-model="create.description" required> </textarea>
+          </label>
+          <label class="item-input subBut">
+            <button class="button button-block button-balanced" type="submit">Create</button>
+          </label>
+          <p class="message assertive  hide"> {{message}}</p>
+        </div>
+      </form>
+      </div>
+      </div>
+    </ion-content>
+  </div>
+</ion-view>
+
+
+<!--
+To Do: 
+
+-Messaging
+-Double Password
+    
+ -->

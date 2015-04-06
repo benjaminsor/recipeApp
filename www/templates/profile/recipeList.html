@@ -1,0 +1,26 @@
+	
+<div class="recipe-list">
+	<label class="item item-input search">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" class="form-control" placeholder="Search Recipes" ng-model="search.$">
+	</label>
+
+
+	<div class="recipe-list-item" ng-repeat="recipe in recipes | filter: search ">
+		<a href="#/tab/{{tab}}-recipe/{{recipe._id}}">
+		<div class="list-recipe">
+
+	  		<div class="recipe-bg-image" style="background: url('{{recipe.image}}') no-repeat center; background-size:cover; width: 100%;">
+	  		</div>
+
+	  		<div class="recipe-overlay">
+	  		</div>
+
+	      	<div class="recipe-info">
+				<h2 class="recipe-name">{{recipe.name}}</h2>
+			</div>
+			
+		</div>
+		</a>
+	</div>
+</div>

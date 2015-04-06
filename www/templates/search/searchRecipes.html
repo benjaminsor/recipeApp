@@ -1,0 +1,25 @@
+<div class="list list-inset">
+  	<label class="item item-input">
+    	<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" class="form-control" placeholder="Search Recipes" ng-model="searchQuery.recipes" ng-keyup="searchRecipes()">
+	</label>
+	<ion-item class="card" ng-repeat="recipe in recipes" href="#/tab/search-recipe/{{recipe._id}}" ng-if="loaded">
+		<div class="row">
+			<div class="col">
+				<div class="recipe-image-container">
+					<img class="recipe-image" src="{{recipe.image}}">
+				</div>
+			</div>
+			<div class="col">
+				<h2>{{recipe.name}}</h2>
+				<a href="#/tab/user/{{recipe.username}}/recipe-book">{{recipe.username}}</a>
+			</div>
+		</div>
+	</ion-item>
+	<div class="loadingOverlay" ng-if="!loaded">
+		<ion-spinner icon="android" class="spinner-balanced"></ion-spinner>
+	</div>
+	<div class="resultsOverlay" ng-hide="results">
+		<h2>Search Recipes</h2>
+	</div>
+</div>

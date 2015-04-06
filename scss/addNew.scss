@@ -1,0 +1,149 @@
+.add-new {
+	padding:50px 0;
+}
+
+.add-new .item {
+	padding:0;
+}
+
+.add-new-landing {
+	text-align:center;
+}
+
+.add-new-landing li {
+	margin:35px 10px;
+	font-size:90%;
+}
+
+.add-new-landing li h5 {
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	padding:2px 0;
+	width:20%;
+	margin:0 auto;
+	color:#ddd;
+	font-size:145%;
+}
+
+.add-new-landing li i {
+	font-size:600%;
+	color:#ccc;
+}
+
+.add-new .slide-inner {
+	width:90%;
+	margin:0 auto;
+}
+
+.add-new input {
+	border-bottom:1px solid #ccc;
+	width:100%;
+}
+
+.add-new-website .add-url .slide-inner, .add-new-website .edit-name .slide-inner, .add-new-website .add-tags .slide-inner, .add-new-website .add-notes .slide-inner {
+	padding: 30% 0;
+}
+
+.add-new-website .button {
+	display:block;
+	margin:30px auto;
+}
+
+.add-new-website h5 {
+	color:#aaa;
+	font-weight:400;
+}
+
+.add-new-website .select-image input {
+	margin-bottom:40px;
+}
+
+.add-new-website .select-image ul {
+	display:inline-block;
+	width:100%;
+}
+
+.add-new-website .select-image li {
+	width:31.3333333333333333%;
+	margin:1%;
+	max-width:120px;
+	padding:5px;
+	height:100px;
+	float:left;
+	text-align:center;
+	border:1px solid #ddd;
+	cursor:pointer;
+}
+
+.add-new-website .select-image li.active {
+	border: 2px solid $balanced;
+}
+
+.add-new-website .select-image li img {
+	max-width:95%;
+	max-height:95%;
+	vertical-align:middle;
+}
+
+.add-new-website .select-image li p {
+	margin-top: 20%;
+	font-size:340%;
+	color:#bbb;
+}
+
+.add-new .helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+
+.add-new-website .edit-ingredients .remove-ing, .add-new-website .edit-directions .remove-dir  {
+	float: left;
+	width: 5%;
+	margin-top: 8px;
+}
+
+.add-new-website .edit-ingredients .add-ing, .add-new-website .edit-directions .add-dir {
+	float:right;
+	width: 5%;
+	margin-top: 8px;
+}
+
+.add-new-website .edit-ingredients .ingAdder, .add-new-website .edit-directions .dirAdder {
+	margin-top:20px;
+}
+
+.add-new .edit-ingredients input {
+	width:90%;
+}
+
+.add-new .edit-directions textarea{
+	border:1px solid #ddd;
+	width:90%;
+}
+
+.add-new .edit-ingredients .skip {
+	margin:40px 0;
+}
+
+.add-new-website .edit-ingredients h6 {
+	color:$assertive;
+	text-align:center;
+	font-size:140%;
+	padding:50px  0;
+}
+
+.add-new-website .choose-meal input {
+	margin:40px 0;
+}
+
+.add-new-website .choose-ethnicity input {
+	margin:20px 0;
+}
+
+.add-new-website .add-notes .slide-inner textarea {
+	width:100%;
+	height:100px;
+	border:1px solid #ddd;
+}

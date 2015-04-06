@@ -1,0 +1,112 @@
+<ion-view title="Recipe">
+  <ion-content class="recipe">
+
+  			<div class="recipe-header">
+
+	  			<div class="recipe-bg-image" style="background: url('{{recipe.image}}') no-repeat center; background-size:cover; width: 100%;">
+	  			</div>
+
+	  			<div class="recipe-overlay">
+	  			</div>
+
+	  			<div class="recipe-info-section">
+	  				<p class="addedBy"><small>Added By:</small> <a href="#/tab/{{tab}}/user/{{recipe.username}}/recipe-book"> {{recipe.username}}</a></p>
+		  			<p class="source" ng-if="recipe.source"><small>Source:</small> <a href="{{recipe.source}}"> {{source}}</a></p>
+	  			</div>
+	  			
+	  			<div class="recipe-title-section">
+		  			<h3>{{recipe.name}}</h3>
+	  			</div>
+
+	  			<div class="list-manage">
+	  				<a class="a button button-round button-clear button-light button-small" activate-fork-list-R ng-click="addToTryList()"><i class="icon ion-fork"></i></a>
+	  				<a class="a button button-round button-clear button-light button-small" activate-fork-list-R ng-click="showBookpopup()"><i class="icon ion-ios-book"></i></a>
+	  				<div class="stats">
+	  					<ul>
+	  						<li>
+	  							<h3>{{recipe.stats.forks}}</h3>
+	  							<p>Forks</p>
+	  						</li>
+	  						<li>
+	  							<h3>{{recipe.stats.books}}</h3>
+	  							<p>Books</p>
+	  						</li>
+	  						<li>
+	  							<a href="#/tab/{{tab}}/comments_{{recipe._id}}"><h3>{{recipe.comments.length}}</h3></a>
+	  							<p>Comments</p>
+	  						</li>
+	  					</ul>
+	  				</div>
+	  			</div>
+    
+			</div>
+			
+			<div class="row ingredients" ng-if="recipe.ingredients.length">
+				<div class="col">
+					<div class="page-header">
+						<h3>Ingredients:</h3>
+					</div>
+					<ul>
+						<li ng-repeat="ingredient in recipe.ingredients track by $index">
+							<!-- <img class="ing-image" src="{{ingredient}}"> -->
+							{{ingredient}}
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="row view-recipe" ng-if="recipe.source">
+				<div class="col">
+					<button ng-click="openRecipe()" class="source button button-balanced button-block icon icon-left ion-ios-list">View Full Recipe</button>
+				</div>	
+			</div>
+
+			<div class="row directions" ng-if="recipe.directions.length">
+				<div class="col">
+					<div class="page-header">
+						<h3>Directions:</h3>
+					</div>
+					<ul>
+						<li ng-repeat="direction in recipe.directions">
+							{{direction}}
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="row notes" ng-if="recipe.notes || userNotes">
+				<div class="col">
+					<div class="page-header">
+						<h3>Notes:</h3>
+					</div>
+					<p class="myNotes"><h5>My notes:</h5>{{userNotes}}</p>
+					<p>{{recipe.notes}}</p>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<div class="page-header">
+						<h3>Comments:</h3>
+					</div>
+					<a href="#/tab/{{tab}}/comments_{{recipe._id}}" ng-if="recipe.comments.length > 4" class="button button-clear button-small button-balanced">Show {{recipe.comments.length - 4}} more comment(s)</a>
+					<ul class="list comments">
+						<li ng-repeat="comment in recipe.comments | limitTo: -4" >
+							<div class="row">
+								<div class="col">
+										<p><a class="comment-user" href="#/tab/{{tab}}/user/{{comment.user}}/recipe-book">{{comment.user}}</a> <small>{{comment.content}}</small></p>
+								</div>
+								<div class="col col-10 hide" close-comment ng-click="removeComment(comment)">
+									<a><i class="icon ion-android-close"></i></a>
+								</div>
+							</div>
+						</li>
+						<label class="item item-input">
+							<input type="text" placeholder="Write a Comment..." ng-model="RData.newComment" ng-enter="addComment()">
+						</label>
+					</ul>
+				</div>
+			</div>
+		
+  </ion-content>
+</ion-view>

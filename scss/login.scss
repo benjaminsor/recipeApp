@@ -1,0 +1,40 @@
+.login-screen, .login-screen input, .login-screen textarea {
+	color:#fff;
+	font-size:140%;
+}
+
+.login-screen p {
+	font-size:80%;
+}
+
+.login-screen textarea {
+	background:none;
+	border: 1px solid #fff;
+	padding:5px;
+}
+
+.login-screen input {
+	border-bottom:1px solid #fff;
+	margin:0 0 20px 0;
+}
+
+.login-screen .button {
+	margin-bottom:10px;
+}
+
+.loginBox {
+	width:80%;
+	margin:0 auto;
+}
+
+.loginBox.create {
+	padding:20% 0;
+}
+
+.login-screen .item-input {
+	padding:0;
+}
+
+.login-screen .item-input.subBut {
+	margin:20px 0;
+}

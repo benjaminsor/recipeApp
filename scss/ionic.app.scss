@@ -1,0 +1,247 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+*/
+$light:                           #ffffff !default;
+$stable:                          #f0f8e9 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+/*$balanced:                        #5d9451 !default;*/
+$balanced:                        #7fb653 !default;
+$balanced:#65C6BB;
+/*$energized:                       #ffc900 !default;*/
+$energized:                       #e89902 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444444 !default;
+
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+
+/* GENERAL STYLES && OVERRIDES */
+
+body,html {
+	color:#555;
+}
+
+a {
+	color: $balanced;
+	text-decoration:none;
+	opacity:1;
+}
+
+a:hover {
+	opacity:.8;
+	cursor:pointer;
+}
+
+p {
+	margin:0;
+	line-height:100%;
+}
+
+button.plus.icon-left:before, button.minus.icon-left:before {
+  font-size: 100%;
+}
+
+.button-balanced.button-clear {
+	opacity: .5;
+}
+
+.button-balanced.button-clear.active, .button-clear.activated {
+  opacity:1;
+}
+
+.button.button-block {
+	margin:0;
+}
+
+.button-small.button-round {
+	border-radius:100px;
+	height:40px;
+	width:40px;
+	opacity:.9;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight:200;
+	color:#444;
+}
+
+.logo {
+	text-align:center;
+	color: $balanced;
+	padding:100px 0 0 0;
+}
+
+.bar.bar-light .title {
+  color: $balanced;
+}
+
+.bar.bar-light {
+	border-color:$balanced;
+	background-color:#ddd;
+}
+
+.tab-item {
+	color:rgba(68, 68, 68, 0.4);
+}
+
+.tab-item:hover {
+	color:rgba(68, 68, 68, 0.4);
+}
+
+.tab-item.tab-item-active {
+	color:$balanced;
+	border-color:#ddd;
+	border-top: 1px solid !important;
+	margin-top:-2px;
+}
+
+.tabs-striped.tabs-light .tab-item {
+  color: rgba(68, 68, 68, 0.4);
+}
+
+.tabs-light > .tabs {
+	color:$balanced;
+	background-color:#f4f4f4;
+}
+
+.tabs-striped.tabs-light .tab-item.tab-item-active, .tabs-striped.tabs-light .tab-item.active, .tabs-striped.tabs-light .tab-item.activated {
+	color:$balanced;
+	margin-top:-3px;
+}
+
+
+.tabs-striped .tabs {
+	border-top:1px solid #ddd !important;
+}
+
+.tabs-striped.tabs-light .tabs {
+	background-color:#f4f4f4;
+}
+
+.page-header {
+	padding:20px 0 0 0;
+	margin:0 0 20px 0;
+	border-bottom:1px solid #ddd;
+}
+
+.recipes .item-complex .item-content {
+	padding: 0;
+}
+
+.item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+	overflow:auto;
+	white-space:normal;
+	text-overflow:inherit;
+}
+
+.align-center {
+	text-align:center;
+}
+
+.search-type.active {
+	border-bottom: 1px solid $balanced;
+}
+
+.login-screen ion-content {
+	background:$stable;
+}
+
+.login-screen .item.item-input {
+	margin:15px 0;
+}
+
+.login-screen .card .item:last-child {
+	border:0;
+}
+
+.search .button-bar {
+	width: 80%;
+  	margin: 10px auto 0 auto;
+}
+
+.profile .button-bar {
+	width: 94%;
+	margin: 10px auto;
+}
+
+/*.list {
+	width:98%;
+	margin:0 auto;
+}
+*/
+.card {
+	margin:0 0 10px 0;
+}
+
+.home .row {
+	padding:0;
+}
+/*
+.item {
+	padding:8px;
+}
+*/
+.card .item:last-child {
+  border-bottom: 1px solid #ddd;
+}
+
+.item-divider {
+	background-color:#f8f8f8;
+}
+
+.item.item-input {
+	border:1px solid #ddd;
+	height:36px;
+	margin:15px 0 0 0;
+	padding:0 8px;
+}
+
+.item p {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.item-button-right, a.item.item-button-right, button.item.item-button-right {
+	padding-right:60px;
+}
+
+.item-button-right > .button {
+	top:16px;
+}
+
+.item.item-input input {
+	height:30px;
+}
+
+.loadingOverlay, .resultsOverlay {
+	width:100%;
+	margin-top:30%;
+	text-align:center;
+	z-index:100;
+}
+
+.resultsOverlay h2 {
+	color:#e8e8e8;
+}
+
+.tabs-striped.tabs-light .tab-item .badge {
+	opacity:1;
+}
+
+
+@import "login";
+@import "home";
+@import "recipes";
+@import "addNew";
+@import "recipeList";

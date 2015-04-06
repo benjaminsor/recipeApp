@@ -1,0 +1,33 @@
+.recipe-list .search {
+	margin:0 auto 30px auto;
+	width:90%;
+}
+
+.recipe-list .recipe-list-item {
+	width:50%;
+	position:relative;
+	border: 5px solid #fff;
+	max-width:500px;
+	float:left;
+}
+
+.recipe-list .list-recipe {
+	height:160px;
+}
+
+.recipe-list .recipe-info {
+	z-index:10;
+	position:relative;
+	height:100%;
+}
+
+.recipe-list .recipe-name {
+	color:$light;
+	font-size:150%;
+	font-weight:200;
+	position:absolute;
+	top:0;
+	left: 0;
+	padding:5px 7px;
+	margin:0;
+}
