@@ -2,7 +2,7 @@ angular.module('recipes.services', [])
 
   .factory('authFactory', ['$http', '$ionicHistory', '$location', '$q', '$timeout', '$rootScope', '$window', function($http, $ionicHistory, $location, $q, $timeout, $rootScope, $window) {
     
-    var baseUrl = 'http://localhost:8888/api/';
+    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
 
     var authFactory = {
       User: {
@@ -68,7 +68,7 @@ angular.module('recipes.services', [])
 
   .factory('feedFactory', ['$http', '$q', function($http, $q) {
 
-    var baseUrl = 'http://localhost:8888/api/';
+    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
 
     return {
       getFeed: function(username) {
@@ -86,7 +86,7 @@ angular.module('recipes.services', [])
 
   .factory('recipeFactory', ['$http','$q', function($http, $q) {
     
-    var baseUrl = 'http://localhost:8888/api/';
+    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
 
     return {
       getRecipes: function() {
@@ -134,7 +134,7 @@ angular.module('recipes.services', [])
 
   .factory('userFactory', ['$http','$q', '$window', function($http, $q, $window) {
 
-    var baseUrl = 'http://localhost:8888/api/';
+    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
 
     return {
       getUser: function(username) {
@@ -171,7 +171,7 @@ angular.module('recipes.services', [])
 
   .factory('scrapeFactory', ['$http', function($http) {
 
-    var baseUrl = 'http://localhost:8888/api/';
+    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
 
     return {
       scrape: function(url) {
