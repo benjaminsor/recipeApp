@@ -69,11 +69,7 @@
 	margin-top:-2px;
 }
 
-.home .button.button-small {
-	box-shadow: 1px 1px 0px rgba(100, 100, 100, .6);
-	height:42px;
-	width:42px;
-}
+
 
 .home .button.button-small i:before {
 	font-size:28px;
@@ -110,4 +106,29 @@
 	margin:0;
 	color:$balanced;
 	font-size:140%;
+}
+
+.search .item.item-input {
+	width:90%;
+	margin:10px auto 0 auto;
+	border:none;
+	border-bottom: 1px solid $stable;
+}
+
+.search .button-bar {
+	border-bottom: 1px solid $stable;
+	opacity:.75;
+}
+
+.search .button-bar .button.button-outline.button-small {
+	border:none;
+	border-radius:none;
+}
+
+.search .button-bar > .button:first-child {
+  border-radius: 0;
+}
+
+.search .button-bar > .button:last-child {
+  border-radius: 0;
 }

@@ -5,7 +5,7 @@ in ionic's _variables.scss file.
 For example, you might change some of the default colors:
 */
 $light:                           #ffffff !default;
-$stable:                          #f0f8e9 !default;
+$stable:                          #e0e0e0 !default;
 $positive:                        #387ef5 !default;
 $calm:                            #11c1f3 !default;
 /*$balanced:                        #5d9451 !default;*/
@@ -47,16 +47,14 @@ p {
 	line-height:100%;
 }
 
-button.plus.icon-left:before, button.minus.icon-left:before {
-  font-size: 100%;
+.button-balanced.button-small.button-round {
+	background: none;
+	border:none;
+	box-shadow:none;
 }
 
-.button-balanced.button-clear {
-	opacity: .5;
-}
-
-.button-balanced.button-clear.active, .button-clear.activated {
-  opacity:1;
+.button-balanced.button-small.button-round.active {
+	background: $balanced;
 }
 
 .button.button-block {
@@ -67,7 +65,12 @@ button.plus.icon-left:before, button.minus.icon-left:before {
 	border-radius:100px;
 	height:40px;
 	width:40px;
-	opacity:.9;
+}
+
+.button-bar > .button {
+	white-space:normal;
+	overflow:normal;
+	width:auto;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -152,21 +155,12 @@ h1,h2,h3,h4,h5,h6 {
 	border-bottom: 1px solid $balanced;
 }
 
-.login-screen ion-content {
-	background:$stable;
-}
-
 .login-screen .item.item-input {
 	margin:15px 0;
 }
 
 .login-screen .card .item:last-child {
 	border:0;
-}
-
-.search .button-bar {
-	width: 80%;
-  	margin: 10px auto 0 auto;
 }
 
 .profile .button-bar {
@@ -222,6 +216,11 @@ h1,h2,h3,h4,h5,h6 {
 
 .item.item-input input {
 	height:30px;
+}
+
+.item.item-inset {
+	width:95%;
+	margin:0 auto;
 }
 
 .loadingOverlay, .resultsOverlay {

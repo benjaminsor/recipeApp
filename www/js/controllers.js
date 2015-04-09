@@ -2,9 +2,8 @@ angular.module('recipes.controllers', [])
 
     .controller('tabCtrl', function($scope, authFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
+        $scope.notifications = '';
 
-        $scope.notifications = 'ü';
-        
     })
 
     .controller('loginCtrl', function($scope, $location, $rootScope, authFactory, $timeout, $ionicHistory, $window) {
@@ -26,77 +25,16 @@ angular.module('recipes.controllers', [])
         };
 
         // ToDo: return promises for further actions
-        // ToDo: Automatically add self to following list
 
     })
 
-    .controller('HomeCtrl', function($scope, feedFactory, authFactory, feedFactory, $ionicTabsDelegate, $ionicPopup, arrayFactory, userFactory) {
+    .controller('HomeCtrl', function($scope, feedFactory, authFactory, $ionicPopup, arrayFactory, userFactory, tabRecognitionFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.feed = {};
 
         var getFeed = function(username) {
-            feedFactory.getFeed(username).success(function(data) {
-                //ToDo: move this stuff to factory:
-                var feed = [];
-                var item = {};
-                angular.forEach(data, function(item) {
-                    item.actions.sort(function(a, b) {
-                        a = new Date(a.date);
-                        b = new Date(b.date);
-                        return a>b ? -1 : a<b ? 1 : 0;
-                    });
-                    var actionLength;
-                    var actArray = [];
-                    angular.forEach(item.actions, function(action) {
-                        if(action.action === item.actions[0].action) {
-                            actArray.push(action);
-                        }
-                    });
-                    var actionsNumber = [];
-                    angular.forEach(actArray, function(el){
-                        if($.inArray(el.username, actionsNumber) === -1) {
-                            actionsNumber.push(el.username);
-                        } 
-                        actionLength = JSON.stringify(actionsNumber.length - 1);
-                    });
-                    var act = item.actions[0];
-                    if(act.action === 'FORK') {
-                        if(actionLength === '0') {
-                            act.phrase = 'forked this';
-                        } else if(actionLength === '1') {
-                            act.phrase = 'and ' + actionLength + ' other person forked this';
-                        } else {
-                            act.phrase = 'and ' + actionLength + ' other people forked this';
-                        }
-                    } else if (act.action === 'COMMENT') {
-                        if(actionLength === '0') {
-                            act.phrase = 'commented on this';
-                        } else if(actionLength === '1') {
-                            act.phrase = 'and ' + actionLength + ' other person commented on this';
-                        } else {
-                            act.phrase = 'and ' + actionLength + ' other people commented on this';
-                        }
-                    } else if (act.action === 'BOOK') {
-                        if(actionLength === '0') {
-                            act.phrase = 'added this to their book';
-                        } else if(actionLength === '1') {
-                            act.phrase = 'and ' + actionLength + ' other person added this to their book';
-                        } else {
-                            act.phrase = 'and ' + actionLength + ' other people added this to their book';
-                        }
-                    } else if (act.action === 'ADD') {
-                        act.phrase = 'added a new recipe';
-                    }
-                    item.action = item.actions[0];
-                    item.number = actionLength;
-                    item.recipe = item.recipe;
-                    feed.push(item);
-                });
-
-                $scope.feed = feed;
-                //console.log(feed);
-            }).error(function(data) {
-                console.log(data);
+            feedFactory.getFeed(username).then(function(data) {
+                $scope.feed = data;
             }).finally(function() {
                 $scope.$broadcast('scroll.refreshComplete');
             });
@@ -108,18 +46,7 @@ angular.module('recipes.controllers', [])
             authFactory.logOut();
         }
 
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
+        $scope.tab = tabRecognitionFactory.tab;
 
         $scope.doRefresh = function() {
             getFeed($scope.user.username);
@@ -141,30 +68,47 @@ angular.module('recipes.controllers', [])
             });
         };
 
-        $scope.addToTryList = function(recipe) {
+
+        $scope.handleForkList = function(recipe) {
+            if($scope.user.tryList.length) {
+                if ($scope.user.tryList.indexOf(recipe._id) > -1) {
+                    removeFromTryList(recipe);
+                } else {
+                    addToTryList(recipe);
+                }
+            } else {
+                addToTryList(recipe); 
+            }
+        };
+
+        var addToTryList = function(recipe) {
             $scope.user.tryList.push(recipe._id);
             userFactory.updateUser($scope.user).then(function() {
-                $scope.myBookAdd = true;
-                $scope.tryListAdd = false;
-                $scope.doRefresh();
-                showAlert('Recipe', 'added', 'Try Later List');
+                showAlert('Recipe', 'forked', '');
+                var feedData = {
+                    username: $scope.user.username,
+                    date: new Date().getTime(),
+                    recipe: recipe._id,
+                    action: 'FORK'
+                };
+                feedFactory.postToFeed(feedData).success(function(data) {
+                    console.log(data);
+                }).error(function(data) {
+                    console.log(data);
+                });
             });
-            var feedData = {
-                username: $scope.user.username,
-                date: new Date().getTime(),
-                recipe: recipe._id,
-                action: 'FORK'
-            };
-            feedFactory.postToFeed(feedData).success(function(data) {
-                console.log(data);
-            }).error(function(data) {
-                console.log(data);
+        };
+
+        var removeFromTryList = function(recipe) {
+            arrayFactory.remove($scope.user.tryList, recipe._id);
+            userFactory.updateUser($scope.user).then(function() {
+                showAlert('Recipe', 'removed', 'Fork List');
             });
         };
 
     })
 
-    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, $ionicTabsDelegate, recipeFactory, feedFactory) {
+    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipe = recipe.data;
         $scope.myBookAdd = true;
@@ -184,18 +128,7 @@ angular.module('recipes.controllers', [])
             $scope.source = recipe.data.source.split('//')[1].split('.com')[0] + '.com';
         }
         
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
+        $scope.tab = tabRecognitionFactory.tab;
 
         angular.forEach($scope.user.myBook, function(value) {
             if (value.r_id === recipe.data._id) {
@@ -369,43 +302,19 @@ angular.module('recipes.controllers', [])
              
     })
 
-    .controller('activityCtrl', function($scope, authFactory, feedFactory, $ionicTabsDelegate) {
+    .controller('activityCtrl', function($scope, authFactory, feedFactory, tabRecognitionFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
+        $scope.feed = {};
 
-        feedFactory.getActivity($scope.user.username).success(function(data) {
-            //var activity = [];
-            angular.forEach(data, function(item) {
-                if(item.action === 'FORK') {
-                    item.phrase = 'forked your recipe:';
-                } else if (item.action === 'BOOK') {
-                    item.phrase = 'added your recipe to their book:';
-                } else if (item.action === 'COMMENT') {
-                    item.phrase = 'commented on your recipe:';
-                } else if (item.action === 'FOLLOW') {
-                    item.phrase = 'started following you.';
-                }
-            })
+        feedFactory.getActivity($scope.user.username).then(function(data) {
             $scope.activity = data;
-        }).error(function(data) {
-            console.log(data);
         });
 
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
+        $scope.tab = tabRecognitionFactory.tab;
 
     })
 
-    .controller('userCtrl', function($scope, authFactory, $ionicPopover, $sce, $ionicTabsDelegate, user, userFactory, arrayFactory, feedFactory) {
+    .controller('userCtrl', function($scope, authFactory, $ionicPopover, $sce, tabRecognitionFactory, user, userFactory, arrayFactory, feedFactory) {
         $scope.user = user;
         var loggedInUser = authFactory.User.a || authFactory.User.b;
 
@@ -428,18 +337,7 @@ angular.module('recipes.controllers', [])
             $scope.user.image = $sce.trustAsHtml('<i class="icon ion-ios-person"></i>');
         }
 
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
+        $scope.tab = tabRecognitionFactory.tab;
 
         $scope.follow = function() {
             loggedInUser.following.push($scope.user.username);
@@ -490,22 +388,11 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('recipeBookCtrl', function($scope, authFactory, rbRecipes, $ionicTabsDelegate) {
+    .controller('recipeBookCtrl', function($scope, authFactory, rbRecipes, tabRecognitionFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipes = rbRecipes.data;
 
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
+        $scope.tab = tabRecognitionFactory.tab;
 
         $scope.userNotes = '';
         var allRecipes = $scope.recipes;
@@ -520,32 +407,27 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('forkListCtrl', function($scope, authFactory, forkRecipes, $ionicTabsDelegate) {
+    .controller('forkListCtrl', function($scope, authFactory, forkRecipes, tabRecognitionFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipes = forkRecipes.data;
 
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
+        $scope.tab = tabRecognitionFactory.tab;
 
     })
 
-    .controller('searchCtrl', function($scope, $ionicTabsDelegate, recipeFactory, userFactory, $sce, authFactory, arrayFactory) {
+    .controller('searchCtrl', function($scope, recipeFactory, tabRecognitionFactory, recipes, userFactory, $sce, authFactory, arrayFactory) {
         var loggedInUser = authFactory.User.b;
-        $scope.recipes = {};
-        $scope.users = {};
+        $scope.searchItems = {};
         $scope.results;
         $scope.loaded = true;
         $scope.searchQuery = {};
+        $scope.recipes = recipes;
+        $scope.tab = tabRecognitionFactory.tab;
+
+        $scope.$watch("recipes", function(newValue, oldValue) {
+            console.log($scope.recipes);    
+        });
+
 
         $scope.searchRecipes = function() {
             $scope.results = true;
@@ -553,9 +435,9 @@ angular.module('recipes.controllers', [])
             recipeFactory.getRecipeSearchResults($scope.searchQuery.recipes).success(function(data) {
                 $scope.loaded = true;
                 if (data.length) {
-                    $scope.recipes = data;
+                    $scope.searchItems = data;
                 } else {
-                    $scope.recipes = {};
+                    $scope.searchItems = {};
                     $scope.results = false;
                 }   
             }).error(function(data) {
@@ -569,9 +451,9 @@ angular.module('recipes.controllers', [])
             userFactory.getPeopleSearchResults($scope.searchQuery.people).success(function(data) {
                 $scope.loaded = true;
                 if (data.length) {
-                    $scope.users = data;
+                    $scope.searchItems = data;
                 } else {
-                    $scope.users = {};
+                    $scope.searchItems = {};
                     $scope.results = false;
                 }     
             }).error(function(data) {
@@ -580,19 +462,6 @@ angular.module('recipes.controllers', [])
         };
         
         $scope.image = $sce.trustAsHtml('<i class="icon ion-ios-person"></i>');
-
-        var tabIndex = $ionicTabsDelegate.selectedIndex();  //move to factory!!! for all controllers..
-        if (tabIndex === 0) {
-            $scope.tab = 'home';
-        } else if (tabIndex === 1) {
-            $scope.tab = 'search';
-        } else if (tabIndex === 2) {
-            $scope.tab = 'addNew';
-        } else if (tabIndex === 3) {
-            $scope.tab = 'activity';
-        } else {
-            $scope.tab = 'profile';
-        }
 
     })
 

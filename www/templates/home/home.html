@@ -1,4 +1,9 @@
 <ion-view title="füdie">
+
+	<ion-nav-buttons side="right" >
+      	<a href="#/tab/searchRecipes" class="button button-clear icon icon-left ion-ios-search-strong"> </a>
+	</ion-nav-buttons>
+
  	<ion-content class="home">
   		<ion-refresher pulling-text="" on-refresh="doRefresh()" pulling-icon="" spinner="dots">
   		</ion-refresher>
@@ -22,7 +27,7 @@
 				</div>
 			
 				<div class="list-manage">
-					<a class="a button button-round button-light button-small" activate-fork-list ng-click="addToTryList(item.recipe)"><i class="icon ion-fork"></i></a>
+					<a fork-active class="a button button-round button-balanced button-small" ng-click="handleForkList(item.recipe)"><i class="icon ion-fork"></i></a>
 					<div class="stats">
 						<ul>
 							<li>

@@ -63,33 +63,25 @@ angular.module('recipes.directives', [])
     }
 })
 
-.directive('activateForkList', function (authFactory) {
+.directive('forkActive', function() {
     return {
-    	restrict: 'A',
-    	link: function(scope, elem, attr) {
-    		var forkList = scope.user.tryList;
-            var bookList = scope.user.myBook;
-    		function activate() {
-    			elem.removeClass('active button-balanced');
-    			angular.forEach(forkList, function(value) {
-    				if(value === scope.item.recipe._id) {
-    					elem.addClass('active button-balanced');
-    					elem.unbind('click');
-    				} 
-    			}) 
-                angular.forEach(bookList, function(value) {
-                    if(value.r_id === scope.item.recipe._id) {
-                        elem.addClass('active button-balanced button-clear').css('box-shadow','none').removeClass('button-light');
-                        elem.find('i').removeClass('ion-fork').addClass('ion-ios-book');
-                        elem.unbind('click');
-                    } 
-                })
-    		}
-    		elem.on('click', function() {
-    			activate();
-    		})
-    		activate();
-    	}
+        restrict: 'A',
+        link: function(scope, elem, attr) {
+            var forkedList = scope.user.tryList;
+            var bookedList = scope.user.myBook;
+            var toggleClass = function() {
+                if (forkedList.indexOf(scope.item.recipe._id) > -1) {
+                    elem.addClass('active');
+                } else {
+                    elem.removeClass('active');
+                }
+            };
+            elem.on('click', function() {
+                toggleClass();
+            });
+            toggleClass();
+            
+        }
     }
 })
 

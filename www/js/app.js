@@ -58,6 +58,40 @@ angular.module('recipes', ['ionic', 'recipes.controllers', 'recipes.services', '
       }
     }
   })
+  .state('tab.searchRecipes', {
+    url:'/searchRecipes',
+    views: {
+      'tab-home': {
+        templateUrl: 'templates/home/search.html',
+        controller: 'searchCtrl'
+      }
+    },
+    resolve: {
+      loggedin: function(authFactory) {
+        return authFactory.Check();
+      },
+      recipes: function() {
+        return true;
+      }
+    }
+  })
+  .state('tab.searchPeople', {
+    url:'/searchPeople',
+    views: {
+      'tab-home': {
+        templateUrl: 'templates/home/search.html',
+        controller: 'searchCtrl'
+      }
+    },
+    resolve: {
+      loggedin: function(authFactory) {
+        return authFactory.Check();
+      },
+      recipes: function() {
+        return false;
+      }
+    }
+  })
   .state('tab.homeRecipe', {
     url: "/home-recipe/:recId",
     views: {
@@ -129,134 +163,6 @@ angular.module('recipes', ['ionic', 'recipes.controllers', 'recipes.services', '
     }
   })
   .state('tab.homeUser.recipeBook', {
-    url:'/recipe-book',
-    views: {
-      'profile-list': {
-        templateUrl: 'templates/profile/recipeList.html',
-        controller: 'recipeBookCtrl'
-      }
-    },
-    resolve: {
-      loggedin: function(authFactory) {
-        return authFactory.Check();
-      },
-      rbRecipes: function(recipeFactory, $stateParams) {
-        var username = $stateParams.username;
-        return recipeFactory.getBookRecipes(username);
-      }
-    }
-  })
-
-
-  ////////////////////////////////////////SEARCH TAB/////////////////////////////////////////
-
-
-  .state('tab.search', {
-    url:"/search",
-    views: {
-      'tab-search': {
-        templateUrl: "templates/search/search.html",
-        controller: "searchCtrl"
-      }
-    }
-  })
-  .state('tab.search.recipes', {
-    url:'/recipes',
-    views: {
-      'search': {
-        templateUrl: 'templates/search/searchRecipes.html'
-      }
-    },
-    resolve: {
-      loggedin: function(authFactory) {
-        return authFactory.Check();
-      }
-    }
-  })
-  .state('tab.search.people', {
-    url:'/people',
-    views: {
-      'search': {
-        templateUrl: 'templates/search/searchPeople.html'
-      }
-    },
-    resolve: {
-      loggedin: function(authFactory) {
-        return authFactory.Check();
-      }
-    }
-  })
-  .state('tab.recipeSearch', {
-    url: "/search-recipe/:recId",
-    views: {
-      'tab-search': {
-        templateUrl: "templates/Recipe.html",
-        controller: 'RecipeCtrl'
-      } 
-    },
-    resolve: {
-      recipe: function($stateParams, recipeFactory) {
-        return recipeFactory.getRecipe($stateParams.recId);
-      }
-    }
-  })
-  .state('tab.searchComments', {
-    url: '/search/comments_:recId',
-    views: {
-      'tab-search': {
-        templateUrl: 'templates/comments.html',
-        controller: 'RecipeCtrl'     
-      }
-    },
-    resolve: {
-      recipe: function($stateParams, recipeFactory) {
-        return recipeFactory.getRecipe($stateParams.recId);
-      }
-    }
-  })
-  .state('tab.searchUser', {
-    url: '/search/user/:username',
-    views: {
-      'tab-search': {
-        templateUrl: 'templates/profile/profile.html',
-        controller: 'userCtrl'
-      }
-    },
-    resolve: {
-      loggedin: function(authFactory) {
-        return authFactory.Check();
-      },
-      user: function($stateParams, userFactory, authFactory, $location) {
-        var loggedinUser = authFactory.User.b;
-        return userFactory.getUser($stateParams.username).then(function(data) {
-          if(data.data.username === loggedinUser.username) {
-            return loggedinUser;
-          } else {
-            return data.data;
-          }
-        });
-      }
-    }
-  })
-  .state('tab.searchUser.tryList', {
-    url:'/try-list',
-    views: {
-      'profile-list': {
-        templateUrl: 'templates/profile/recipeList.html',
-        controller: 'forkListCtrl'
-      }
-    },
-    resolve: {
-      loggedin: function(authFactory) {
-        return authFactory.Check();
-      },
-      forkRecipes: function(recipeFactory, $stateParams) {
-        var username = $stateParams.username;
-        return recipeFactory.getForkRecipes(username);
-      }
-    }
-  })
-  .state('tab.searchUser.recipeBook', {
     url:'/recipe-book',
     views: {
       'profile-list': {

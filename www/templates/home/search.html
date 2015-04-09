@@ -1,0 +1,47 @@
+
+<ion-view title="Search">
+
+  	<ion-content class="search">
+
+		<div class="button-bar">
+			<a href="#/tab/searchRecipes" ng-class="{active: recipes}" class="button button-balanced button-outline button-small">Recipes</a>
+	      	<a href="#/tab/searchPeople" ng-class="{active: !recipes}" class="button button-balanced button-outline button-small">People</a>	
+	    </div>
+			
+		<div class="list">
+			
+		  	<label ng-if="recipes" class="item item-input">
+		    	<i class="icon ion-search placeholder-icon"></i>
+				<input type="text" class="form-control" placeholder="Search Recipes" ng-model="searchQuery.recipes" ng-keyup="searchRecipes()">
+			</label>
+		  	<label ng-if="!recipes" class="item item-input item-inset">
+		    	<i class="icon ion-search placeholder-icon"></i>
+				<input type="text" class="form-control" placeholder="Search People" ng-model="searchQuery.people" ng-keyup="searchPeople()">
+			</label>
+
+			<ul ng-if="recipes">
+				<li class="item item-thumbnail-left"  ng-repeat="item in searchItems" ng-if="loaded">
+  					<img src="{{item.image}}">
+  					{{item.name}}
+				</li>
+			</ul>
+
+			<ul ng-if="!recipes">
+				<li class="item item-avatar"  ng-repeat="item in searchItems" ng-if="loaded">
+					<img src="img/appBack1.jpg">
+  					<a href="#/tab/{{tab}}/user/{{item.username}}">{{item.username}}</a>
+				</li>
+			</ul>
+
+			<div class="loadingOverlay" ng-if="!loaded">
+				<ion-spinner icon="android" class="spinner-balanced"></ion-spinner>
+			</div>
+			<div class="resultsOverlay" ng-hide="results">
+				<h2>No Search Results</h2>
+			</div>
+		</div>
+			
+
+
+	</ion-content>
+</ion-view>

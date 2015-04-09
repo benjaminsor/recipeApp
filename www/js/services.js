@@ -1,9 +1,7 @@
 angular.module('recipes.services', [])
 
   .factory('authFactory', ['$http', '$ionicHistory', '$location', '$q', '$timeout', '$rootScope', '$window', function($http, $ionicHistory, $location, $q, $timeout, $rootScope, $window) {
-    
     var baseUrl = 'https://recipe-service.herokuapp.com/api/';
-
     var authFactory = {
       User: {
         a: null,
@@ -63,19 +61,109 @@ angular.module('recipes.services', [])
       }
     };
     return authFactory;
-
   }])
 
   .factory('feedFactory', ['$http', '$q', function($http, $q) {
 
     var baseUrl = 'https://recipe-service.herokuapp.com/api/';
 
+    var buildFeed = function(username) {
+      var feed = [];
+      var item = {};
+      $http.get(baseUrl + username + '/feed').success(function(data) {
+        angular.forEach(data, function(item) {
+          item.actions.sort(function(a, b) {
+              a = new Date(a.date);
+              b = new Date(b.date);
+              return a>b ? -1 : a<b ? 1 : 0;
+          });
+          var actionLength;
+          var actArray = [];
+          angular.forEach(item.actions, function(action) {
+              if(action.action === item.actions[0].action) {
+                  actArray.push(action);
+              }
+          });
+          var actionsNumber = [];
+          angular.forEach(actArray, function(el){
+              if($.inArray(el.username, actionsNumber) === -1) {
+                  actionsNumber.push(el.username);
+              } 
+              actionLength = JSON.stringify(actionsNumber.length - 1);
+          });
+          var act = item.actions[0];
+          if(act.action === 'FORK') {
+              if(actionLength === '0') {
+                  act.phrase = 'forked this';
+              } else if(actionLength === '1') {
+                  act.phrase = 'and ' + actionLength + ' other person forked this';
+              } else {
+                  act.phrase = 'and ' + actionLength + ' other people forked this';
+              }
+          } else if (act.action === 'COMMENT') {
+              if(actionLength === '0') {
+                  act.phrase = 'commented on this';
+              } else if(actionLength === '1') {
+                  act.phrase = 'and ' + actionLength + ' other person commented on this';
+              } else {
+                  act.phrase = 'and ' + actionLength + ' other people commented on this';
+              }
+          } else if (act.action === 'BOOK') {
+              if(actionLength === '0') {
+                  act.phrase = 'added this to their book';
+              } else if(actionLength === '1') {
+                  act.phrase = 'and ' + actionLength + ' other person added this to their book';
+              } else {
+                  act.phrase = 'and ' + actionLength + ' other people added this to their book';
+              }
+          } else if (act.action === 'ADD') {
+              act.phrase = 'added a new recipe';
+          }
+          item.action = item.actions[0];
+          item.number = actionLength;
+          item.recipe = item.recipe;
+          feed.push(item);
+        });
+      }).error(function(data) {
+        feed = data;
+        console.log(data);
+      });
+      return feed;
+    };
+
+    var buildActivity = function(username) {
+      var activity = [];
+      var item = {};
+      $http.get(baseUrl + username + '/activity').success(function(data) {
+        angular.forEach(data, function(item) {
+            if(item.action === 'FORK') {
+                item.phrase = 'forked your recipe:';
+            } else if (item.action === 'BOOK') {
+                item.phrase = 'added your recipe to their book:';
+            } else if (item.action === 'COMMENT') {
+                item.phrase = 'commented on your recipe:';
+            } else if (item.action === 'FOLLOW') {
+                item.phrase = 'started following you.';
+            }
+            activity.push(item);
+        })
+      }).error(function(data) {
+        activity = data;
+        console.log(data);
+      });
+      return activity;
+    };
+
     return {
       getFeed: function(username) {
-        return $http.get(baseUrl + username + '/feed');
+        var dfd = $q.defer();
+        dfd.resolve(buildFeed(username));
+        return dfd.promise;
       },
       getActivity: function(username) {
-        return $http.get(baseUrl + username + '/activity');
+        var dfd = $q.defer();
+        dfd.resolve(buildActivity(username));
+        return dfd.promise;
       },
       postToFeed: function(data) {
         return $http.post(baseUrl + 'feed', data);
@@ -195,7 +283,25 @@ angular.module('recipes.services', [])
       }
     }
 
-  }]);
+  }])
 
+  .factory('tabRecognitionFactory', ['$ionicTabsDelegate', function($ionicTabsDelegate) {
+    var tabIndex = $ionicTabsDelegate.selectedIndex();
+    var tabName = function() {
+      if (tabIndex === 0) {
+          return 'home';
+      } else if (tabIndex === 1) {
+          return 'addNew';
+      } else if (tabIndex === 2) {
+          return 'activity';
+      } else if (tabIndex === 3) {
+          return 'profile';
+      }
+      return '';
+    };
+    return {
+      tab: tabName()
+    }
 
+  }])
 
