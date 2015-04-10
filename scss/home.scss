@@ -18,6 +18,13 @@
 	height:100%;
 }
 
+.homeLoadingOverlay {
+	position:fixed;
+	top:36%;
+	width:100%;
+	text-align:center;
+}
+
 .recipe-overlay {
 	background: -moz-linear-gradient(top,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.65) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(40%,rgba(0,0,0,0)), color-stop(65%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
@@ -109,20 +116,25 @@
 }
 
 .search .item.item-input {
-	width:90%;
-	margin:10px auto 0 auto;
+	width:100%;
+	margin:0;
+	height:46px;
 	border:none;
 	border-bottom: 1px solid $stable;
 }
 
 .search .button-bar {
 	border-bottom: 1px solid $stable;
-	opacity:.75;
 }
 
-.search .button-bar .button.button-outline.button-small {
+.search .button-bar .button.button-clear {
 	border:none;
 	border-radius:none;
+}
+
+.search .button-bar .button.button-clear.active {
+	opacity:1;
+	border-bottom:2px solid $balanced;
 }
 
 .search .button-bar > .button:first-child {
@@ -132,3 +144,4 @@
 .search .button-bar > .button:last-child {
   border-radius: 0;
 }
+

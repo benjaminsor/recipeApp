@@ -22,7 +22,7 @@
 				   	<h5>Choose an image:</h5>
 				   	<ul class="choose-image">
 				   		<li activate>
-				   			<a><p><i class="icon ion-camera"></i></p></a>
+				   			<a ng-click="getPhoto()"><p><i class="icon ion-camera"></i></p></a>
 				   		</li>
 				   		<li activate>
 				   			<a><p><i class="icon ion-images"></i></p></a>
@@ -41,13 +41,14 @@
 
 			<ion-slide class="edit-ingredients">
 				<div class="slide-inner">
-					<h5>Add Ingredients:</h5>
+					<h5>Ingredients:</h5>
 					<div ng-repeat="ing in scrapedData.ingredients track by $index">
-						<a class="remove-ing" ng-click="removeIng(ing)"><i class="icon ion-android-close"></i></a>
+						<a class="remove-ing button button-small button-ouline button-balanced" ng-click="removeIng(ing)"><i class="icon ion-android-close"></i></a>
 				   		<input type="text" placeholder="Ingredient" ng-model="ing"  value="{{ing}}">
 				   	</div>
+				   	<h5>Add:</h5>
 			   		<div class="ingAdder">
-			   			<a class="add-ing" ng-click="addIng(ing)"><i class="icon ion-plus"></i></a>
+			   			<a class="add-ing button button-small button-ouline button-balanced" ng-click="addIng(ing)"><i class="icon ion-plus"></i></a>
 			   	   		<input type="text" placeholder="Ingredient" ng-model="scrapedData.newIngredient">
 			   	   	</div>
 			   	   	<div class="row">

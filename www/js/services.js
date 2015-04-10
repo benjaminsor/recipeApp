@@ -1,7 +1,8 @@
 angular.module('recipes.services', [])
 
   .factory('authFactory', ['$http', '$ionicHistory', '$location', '$q', '$timeout', '$rootScope', '$window', function($http, $ionicHistory, $location, $q, $timeout, $rootScope, $window) {
-    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    //var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    var baseUrl = 'http://localhost:8888/api/';
     var authFactory = {
       User: {
         a: null,
@@ -65,7 +66,8 @@ angular.module('recipes.services', [])
 
   .factory('feedFactory', ['$http', '$q', function($http, $q) {
 
-    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    //var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    var baseUrl = 'http://localhost:8888/api/';
 
     var buildFeed = function(username) {
       var feed = [];
@@ -174,7 +176,8 @@ angular.module('recipes.services', [])
 
   .factory('recipeFactory', ['$http','$q', function($http, $q) {
     
-    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    //var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    var baseUrl = 'http://localhost:8888/api/';
 
     return {
       getRecipes: function() {
@@ -222,7 +225,8 @@ angular.module('recipes.services', [])
 
   .factory('userFactory', ['$http','$q', '$window', function($http, $q, $window) {
 
-    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    //var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    var baseUrl = 'http://localhost:8888/api/';
 
     return {
       getUser: function(username) {
@@ -259,7 +263,8 @@ angular.module('recipes.services', [])
 
   .factory('scrapeFactory', ['$http', function($http) {
 
-    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    //var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    var baseUrl = 'http://localhost:8888/api/';
 
     return {
       scrape: function(url) {
@@ -304,4 +309,37 @@ angular.module('recipes.services', [])
     }
 
   }])
+
+  .factory('Camera', ['$q','$cordovaCamera','$cordovaFileTransfer', function($q, $cordovaCamera, $cordovaFileTransfer) {
+
+    //var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+    var baseUrl = 'http://localhost:8888/api/';
+
+    var takeSaveImage = function() {
+      var imgSrc;
+      var imgUrl;
+
+      $cordovaCamera.getPicture(function(result) {
+        imgUrl = result;
+      }, function(err) {
+      }, options);
+
+      $cordovaFileTransfer.upload(baseUrl + 'file/upload', imgUrl, options).then(function(result) {
+        console.log(result);
+        imgSrc = result;
+      })
+
+      return imgSrc;
+    }
+
+    return {
+      getPicture: function(options) {
+        var q = $q.defer();
+        q.resolve(takeSaveImage());
+        return q.promise;
+      }
+    }
+  }])
+
+
 

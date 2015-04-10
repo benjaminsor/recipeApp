@@ -7752,13 +7752,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 95%;
   margin: 0 auto; }
 
-.loadingOverlay, .resultsOverlay {
+.loadingOverlay, .resultsOverlay, .commentsOverlay {
   width: 100%;
   margin-top: 30%;
   text-align: center;
   z-index: 100; }
 
-.resultsOverlay h2 {
+.resultsOverlay h2, .commentsOverlay h2 {
   color: #e8e8e8; }
 
 .tabs-striped.tabs-light .tab-item .badge {
@@ -7812,6 +7812,12 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   width: 100%;
   height: 100%; }
+
+.homeLoadingOverlay {
+  position: fixed;
+  top: 36%;
+  width: 100%;
+  text-align: center; }
 
 .recipe-overlay {
   background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 65%, rgba(0, 0, 0, 0.65) 100%);
@@ -7896,18 +7902,22 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 140%; }
 
 .search .item.item-input {
-  width: 90%;
-  margin: 10px auto 0 auto;
+  width: 100%;
+  margin: 0;
+  height: 46px;
   border: none;
   border-bottom: 1px solid #e0e0e0; }
 
 .search .button-bar {
-  border-bottom: 1px solid #e0e0e0;
-  opacity: 0.75; }
+  border-bottom: 1px solid #e0e0e0; }
 
-.search .button-bar .button.button-outline.button-small {
+.search .button-bar .button.button-clear {
   border: none;
   border-radius: none; }
+
+.search .button-bar .button.button-clear.active {
+  opacity: 1;
+  border-bottom: 2px solid #65C6BB; }
 
 .search .button-bar > .button:first-child {
   border-radius: 0; }
@@ -8029,6 +8039,13 @@ h1, h2, h3, h4, h5, h6 {
 .userInfo {
   float: left;
   width: 80%; }
+
+.comment-add.item.item-input {
+  position: fixed;
+  bottom: 48px;
+  left: 0;
+  width: 100%;
+  height: 50px; }
 
 .comments .row, .comments .col {
   margin: 0;

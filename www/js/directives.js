@@ -63,18 +63,29 @@ angular.module('recipes.directives', [])
     }
 })
 
-.directive('forkActive', function() {
+.directive('actionFeed', function() {
     return {
         restrict: 'A',
         link: function(scope, elem, attr) {
-            var forkedList = scope.user.tryList;
-            var bookedList = scope.user.myBook;
             var toggleClass = function() {
-                if (forkedList.indexOf(scope.item.recipe._id) > -1) {
-                    elem.addClass('active');
-                } else {
-                    elem.removeClass('active');
+                var inBook;
+                for(var i = 0; i < scope.user.myBook.length; i++) {
+                    if(scope.user.myBook[i].r_id === scope.item.recipe._id) {
+                        inBook = true;
+                    } 
                 }
+                if (!inBook) {
+                    if (scope.user.tryList.indexOf(scope.item.recipe._id) > -1) {
+                        elem.addClass('active');
+                    } else {
+                        elem.removeClass('active');
+                    }  
+                } else {
+                    elem.html('<i class="icon ion-ios-book"></i>');
+                    elem.unbind('click').css('pointer','default');
+                    elem.addClass('active');
+                }
+                      
             };
             elem.on('click', function() {
                 toggleClass();

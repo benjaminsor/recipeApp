@@ -223,14 +223,14 @@ h1,h2,h3,h4,h5,h6 {
 	margin:0 auto;
 }
 
-.loadingOverlay, .resultsOverlay {
+.loadingOverlay, .resultsOverlay, .commentsOverlay {
 	width:100%;
 	margin-top:30%;
 	text-align:center;
 	z-index:100;
 }
 
-.resultsOverlay h2 {
+.resultsOverlay h2, .commentsOverlay h2 {
 	color:#e8e8e8;
 }
 

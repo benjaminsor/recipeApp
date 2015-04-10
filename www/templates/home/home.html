@@ -1,14 +1,21 @@
+<div ng-cloak>
 <ion-view title="füdie">
 
 	<ion-nav-buttons side="right" >
       	<a href="#/tab/searchRecipes" class="button button-clear icon icon-left ion-ios-search-strong"> </a>
 	</ion-nav-buttons>
 
+	<div class="homeLoadingOverlay" ng-if="loading">
+		<ion-spinner icon="android" class="spinner-balanced"></ion-spinner>
+	</div>
+
  	<ion-content class="home">
   		<ion-refresher pulling-text="" on-refresh="doRefresh()" pulling-icon="" spinner="dots">
   		</ion-refresher>
+
+  		
     
-      	<div class="home-item" ng-repeat="item in feed | orderBy: 'action.date':true" >
+      	<div class="home-item" ng-repeat="item in feed | orderBy: 'action.date':true" ng-if="!loading">
 
 	      	<div class="home-recipe-section">
 
@@ -27,7 +34,7 @@
 				</div>
 			
 				<div class="list-manage">
-					<a fork-active class="a button button-round button-balanced button-small" ng-click="handleForkList(item.recipe)"><i class="icon ion-fork"></i></a>
+					<a action-feed class="a button button-round button-balanced button-small" ng-click="handleForkList(item.recipe)"><i class="icon ion-fork"></i></a>
 					<div class="stats">
 						<ul>
 							<li>
@@ -50,3 +57,4 @@
       	</div>
   	</ion-content>
 </ion-view>
+</div>

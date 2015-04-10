@@ -1,36 +1,41 @@
 
-<ion-view title="Search">
+<ion-view hide-nav-bar="true">
 
   	<ion-content class="search">
 
+	  	<label ng-if="recipes" class="item item-input">
+	    	<i class="icon ion-search placeholder-icon"></i>
+			<input type="text" class="form-control" placeholder="Search Recipes" ng-model="searchQuery.recipes" ng-keyup="searchRecipes()">
+		</label>
+	  	<label ng-if="!recipes" class="item item-input">
+	    	<i class="icon ion-search placeholder-icon"></i>
+			<input type="text" class="form-control" placeholder="Search People" ng-model="searchQuery.people" ng-keyup="searchPeople()">
+		</label>
+
 		<div class="button-bar">
-			<a href="#/tab/searchRecipes" ng-class="{active: recipes}" class="button button-balanced button-outline button-small">Recipes</a>
-	      	<a href="#/tab/searchPeople" ng-class="{active: !recipes}" class="button button-balanced button-outline button-small">People</a>	
+			<a href="#/tab/searchRecipes" ng-class="{active: recipes}" nav-transition="none" class="button button-balanced button-clear">Recipes</a>
+	      	<a href="#/tab/searchPeople" ng-class="{active: !recipes}" nav-transition="none" class="button button-balanced button-clear">People</a>	
 	    </div>
 			
 		<div class="list">
 			
-		  	<label ng-if="recipes" class="item item-input">
-		    	<i class="icon ion-search placeholder-icon"></i>
-				<input type="text" class="form-control" placeholder="Search Recipes" ng-model="searchQuery.recipes" ng-keyup="searchRecipes()">
-			</label>
-		  	<label ng-if="!recipes" class="item item-input item-inset">
-		    	<i class="icon ion-search placeholder-icon"></i>
-				<input type="text" class="form-control" placeholder="Search People" ng-model="searchQuery.people" ng-keyup="searchPeople()">
-			</label>
+		  	
 
 			<ul ng-if="recipes">
-				<li class="item item-thumbnail-left"  ng-repeat="item in searchItems" ng-if="loaded">
+				<ion-item href="#/tab/{{tab}}-recipe/{{item._id}}" class="item item-thumbnail-left"  ng-repeat="item in searchItems" ng-if="loaded">
   					<img src="{{item.image}}">
-  					{{item.name}}
-				</li>
+  					<h2>{{item.name}}</h2>
+  					<p><small>Added By:</small> {{item.username}}<br>
+  					<small>Source:</small> {{item.source}}</p>
+				</ion-item>
 			</ul>
 
 			<ul ng-if="!recipes">
-				<li class="item item-avatar"  ng-repeat="item in searchItems" ng-if="loaded">
+				<ion-item href="#/tab/{{tab}}/user/{{item.username}}" class="item item-avatar"  ng-repeat="item in searchItems" ng-if="loaded">
 					<img src="img/appBack1.jpg">
-  					<a href="#/tab/{{tab}}/user/{{item.username}}">{{item.username}}</a>
-				</li>
+  					<h2>{{item.username}}</h2>
+  					<p>{{item.firstName}} {{item.lastName}}</p>
+				</ion-item>
 			</ul>
 
 			<div class="loadingOverlay" ng-if="!loaded">

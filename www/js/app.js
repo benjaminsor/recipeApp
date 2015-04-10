@@ -16,7 +16,7 @@ angular.module('recipes', ['ionic', 'recipes.controllers', 'recipes.services', '
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider) {
 
-  $ionicConfigProvider.views.transition('none');
+  $ionicConfigProvider.views.transition('android');
   $ionicConfigProvider.tabs.position('bottom');
 
   $httpProvider.defaults.withCredentials = true;

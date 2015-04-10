@@ -50,9 +50,16 @@ angular.module('recipes.controllers', [])
 
         $scope.doRefresh = function() {
             getFeed($scope.user.username);
+            setTimeout(function() {
+                $scope.loading = false;
+            },500);
         };
 
-        $scope.$on('$ionicView.enter', function(){
+        $scope.$on('$ionicView.leave', function(){
+            $scope.loading = true;
+        });
+
+        $scope.$on('$ionicView.beforeEnter', function(){
             $scope.doRefresh();
         });
 
@@ -108,7 +115,7 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory) {
+    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory, $location) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipe = recipe.data;
         $scope.myBookAdd = true;
@@ -149,7 +156,45 @@ angular.module('recipes.controllers', [])
            	});
         };
 
-        $scope.showBookpopup = function() {
+        var checkListStatus = function() {
+            if ($scope.user.tryList.indexOf($scope.recipe._id) > -1) {
+                $scope.forkAd = true;
+                $scope.bookAd = false;
+            } else {
+                $scope.forkAd = false;
+            }  
+
+            for(var i = 0; i < $scope.user.myBook.length; i++) {
+                if($scope.user.myBook[i].r_id === $scope.recipe._id) {
+                    $scope.bookAd = true;
+                    $scope.forkAd = false;
+                } else {
+                    $scope.bookAd = false;
+                }
+            }
+        };
+
+        checkListStatus();
+
+        $scope.handleBookList = function() {
+            if($scope.user.myBook.length) {
+                for (var i = 0; i < $scope.user.myBook.length; i++) {
+                    if ($scope.user.myBook[i].r_id === $scope.recipe._id) {
+                        $scope.bookAd = false;
+                        removeFromMyBook();
+                    } else {
+                        $scope.bookAd = true;
+                        showBookpopup();
+                    }
+                }
+            } else {
+                $scope.bookAd = true;
+                showBookpopup(); 
+            }
+        };
+
+        var showBookpopup = function() {
+            $scope.forkAd = false;
             $scope.data = {};
             var myPopup = $ionicPopup.show({
                 template: '<textarea ng-model="data.userNotes" placeholder="Add custom notes here..."></textarea>',
@@ -177,9 +222,9 @@ angular.module('recipes.controllers', [])
             };
             $scope.user.myBook.push(newBookEntry);
             arrayFactory.remove($scope.user.tryList, recipe.data._id);
+            $scope.forkAd = false;
             userFactory.updateUser($scope.user).then(function() {
                 doRefresh($scope.recipe._id);
-                $scope.myBookAdd = false;
             });
             var feedData = {
                 username: $scope.user.username,
@@ -205,7 +250,7 @@ angular.module('recipes.controllers', [])
             }
         };
 
-        $scope.removeFromMyBook = function() {
+        var removeFromMyBook = function() {
             //To do: clean this up into factory???
             removeFromBook();
             userFactory.updateUser($scope.user).then(function() {
@@ -215,12 +260,28 @@ angular.module('recipes.controllers', [])
             });
         };
 
-        $scope.addToTryList = function() {
+        $scope.handleForkList = function() {
+            if($scope.user.tryList.length) {
+                if ($scope.user.tryList.indexOf($scope.recipe._id) > -1) {
+                    $scope.forkAd = false;
+                    removeFromTryList();
+                } else {
+                    $scope.forkAd = true;
+                    addToTryList();
+                }
+            } else {
+                $scope.forkAd = true;
+                addToTryList(); 
+            }
+        };
+
+        var addToTryList = function() {
+            $scope.bookAd = false;
             $scope.user.tryList.push(recipe.data._id);
             //To do: clean this up into factory???
             removeFromBook();
+            
             userFactory.updateUser($scope.user).then(function() {
-                $scope.myBookAdd = true;
                 showAlert('Recipe', 'added', 'Try Later List');
                 doRefresh($scope.recipe._id);
             });
@@ -237,10 +298,9 @@ angular.module('recipes.controllers', [])
             });
         };
         
-        $scope.removeFromTryList = function() {
+        var removeFromTryList = function() {
             arrayFactory.remove($scope.user.tryList, recipe.data._id);
             userFactory.updateUser($scope.user).then(function() {
-                $scope.tryListAdd = true;
                 showAlert('Recipe', 'removed', 'Try Later List');
             });
         };
@@ -254,8 +314,23 @@ angular.module('recipes.controllers', [])
             window.open($scope.recipe.source, '_self', 'location=no'); return false;
         };
 
+        $scope.goToComment = function() {
+            var redirect = '/tab/' + $scope.tab + '/comments_' + $scope.recipe._id;
+            $location.path(redirect);
+        };
+
+
+
+        if($scope.recipe.comments.length) {
+            $scope.ifComments = true;
+        } else {
+            $scope.ifComments = false;
+        }
+
+
         $scope.RData = {};
         $scope.addComment = function() {
+            console.log($scope.RData);
             var comment = {
                 user: $scope.user.username,
                 date: new Date().getTime(),
@@ -264,6 +339,7 @@ angular.module('recipes.controllers', [])
             $scope.recipe.comments.push(comment);
             recipeFactory.postComment($scope.recipe._id, $scope.recipe).success(function(data) {
                 console.log('Comment posted: ', data);
+                $scope.ifComments = true;
                 doRefresh($scope.recipe._id);
                 $scope.RData.newComment = '';
             }).error(function(data) {
@@ -293,7 +369,10 @@ angular.module('recipes.controllers', [])
             recipeFactory.postComment($scope.recipe._id, $scope.recipe).success(function(data) {
                 console.log('Comment removed: ', data);
                 doRefresh($scope.recipe._id);
-                showAlert('Comment', 'Removed', '');
+                if(!$scope.recipe.comments.length) {
+                    $scope.ifComments = false;
+                }
+                //showAlert('Comment', 'Removed', '');
             }).error(function(data) {
                 console.log('Comment failed to remove: ', data);
             });
@@ -419,6 +498,7 @@ angular.module('recipes.controllers', [])
         var loggedInUser = authFactory.User.b;
         $scope.searchItems = {};
         $scope.results;
+        $scope.source;
         $scope.loaded = true;
         $scope.searchQuery = {};
         $scope.recipes = recipes;
@@ -429,13 +509,22 @@ angular.module('recipes.controllers', [])
         });
 
 
+
         $scope.searchRecipes = function() {
             $scope.results = true;
             $scope.loaded = false;
             recipeFactory.getRecipeSearchResults($scope.searchQuery.recipes).success(function(data) {
                 $scope.loaded = true;
                 if (data.length) {
+
+                    for(var i = 0; i < data.length; i++) {
+                        if(data[i].source) {
+                            data[i].source = data[i].source.split('//')[1].split('.com')[0] + '.com';
+                        }
+                    }
+
                     $scope.searchItems = data;
+                    
                 } else {
                     $scope.searchItems = {};
                     $scope.results = false;
@@ -465,7 +554,7 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('addNewCtrl', function($scope, authFactory, scrapeFactory, $ionicSlideBoxDelegate, $ionicPopup, $ionicLoading, recipeFactory, $location, arrayFactory, $ionicHistory, userFactory, feedFactory) {
+    .controller('addNewCtrl', function($scope, authFactory, scrapeFactory, $ionicSlideBoxDelegate, $ionicPopup, $ionicLoading, recipeFactory, $location, arrayFactory, $ionicHistory, userFactory, feedFactory, Camera) {
         var user = authFactory.User.a || authFactory.User.b;
         
         $scope.formData = {
@@ -542,6 +631,14 @@ angular.module('recipes.controllers', [])
             $scope.nextSlide();
         }
 
+        $scope.getPhoto = function() {
+            Camera.getPicture().then(function(imageURI) {
+                //console.log(imageURI);
+            }, function(err) {
+                console.err(err);
+            });
+        };
+
         $scope.postRecipe = function() {
             if($scope.recipe.tags) {
                 var tagArray = $scope.recipe.tags.split(',');
@@ -612,4 +709,6 @@ angular.module('recipes.controllers', [])
         };
 
     })
+
+    
 
