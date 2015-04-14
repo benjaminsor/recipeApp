@@ -554,7 +554,7 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('addNewCtrl', function($scope, authFactory, scrapeFactory, $ionicSlideBoxDelegate, $ionicPopup, $ionicLoading, recipeFactory, $location, arrayFactory, $ionicHistory, userFactory, feedFactory, $cordovaCamera, $cordovaFileTransfer) {
+    .controller('addNewCtrl', function($scope, authFactory, scrapeFactory, $ionicSlideBoxDelegate, $ionicPopup, $ionicLoading, recipeFactory, $location, arrayFactory, $ionicHistory, userFactory, feedFactory) {
         var user = authFactory.User.a || authFactory.User.b;
         
         $scope.formData = {
@@ -631,32 +631,29 @@ angular.module('recipes.controllers', [])
             $scope.nextSlide();
         }
 
-        $cordovaCamera, $cordovaFileTransfer
+        $scope.takePic = function() {
+            
+            navigator.camera.getPicture(
+                upload,
+                function(message) {
+                    alert('Failed to connect to camera!');
+                }
+            );
 
-        $scope.takePicture = function() {
-            var imageFile;
-            $cordovaCamera.getPicture().then(function(imageData) {
-                console.log(imageData);
-                imageFile = imageData;
-            }, function(err) {
-                // An error occured. Show a message to the user
-            });
-            $cordovaFileTransfer.upload('https://recipe-service.herokuapp.com/api/file/upload', imageFile).then(function(result) {
-                console.log(result);
-            }, function(err) {
-                // Error
-            }, function (progress) {
-                // constant progress updates
-            });
+            function upload(imageURI) {
+                var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+                var ft = new FileTransfer();
+                ft.upload(imageURI, encodeURI(baseUrl + 'file/upload'), win, fail);
+            };
+
+            function win(r) {
+                console.log(r.response);
+            };
+
+            function fail(error) {
+                console.log(error.source);
+            };
         };
-
-        // $scope.getPhoto = function() {
-        //     Camera.getPicture().then(function(imageURI) {
-        //         //console.log(imageURI);
-        //     }, function(err) {
-        //         console.err(err);
-        //     });
-        // };
 
         $scope.postRecipe = function() {
             if($scope.recipe.tags) {

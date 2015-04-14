@@ -22,7 +22,7 @@
 				   	<h5>Choose an image:</h5>
 				   	<ul class="choose-image">
 				   		<li activate>
-				   			<a ng-click="takePicture()"><p><i class="icon ion-camera"></i></p></a>
+				   			<a ng-click="takePic()"><p><i class="icon ion-camera"></i></p></a>
 				   		</li>
 				   		<li activate>
 				   			<a><p><i class="icon ion-images"></i></p></a>
@@ -30,6 +30,11 @@
 				   		<li activate ng-click="nextSlide()">
 				   			<span class="helper"></span>
 				   			<img src="img/appBack1.jpg">
+				   		</li>
+
+				   		<li ng-if="imgUrl" activate ng-click="nextSlide()">
+				   			<span class="helper"></span>
+				   			<img src="https://recipe-service.herokuapp.com/images/{{imgUrl}}">
 				   		</li>
 				   	</ul>
 			   	   	<div class="row">

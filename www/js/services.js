@@ -310,38 +310,5 @@ angular.module('recipes.services', [])
 
   }])
 
-  .factory('Camera', ['$q', function($q) {
-
-    var baseUrl = 'https://recipe-service.herokuapp.com/api/';
-    //var baseUrl = 'http://localhost:8888/api/';
-
-    var takeSaveImage = function() {
-      var imgSrc;
-      var imgUrl;
-
-      navigator.camera.getPicture(function(result) {
-        imgUrl = result;
-      }, function(err) {
-      });
-
-      var ft = new FileTransfer();
-
-      ft.upload(imgUrl, encodeURI(baseUrl + 'file/upload')).then(function(result) {
-        console.log(result);
-        imgSrc = result;
-      })
-
-      return imgSrc;
-    }
-
-    return {
-      getPicture: function(options) {
-        var q = $q.defer();
-        q.resolve(takeSaveImage());
-        return q.promise;
-      }
-    }
-  }])
-
 
 
