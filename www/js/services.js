@@ -285,30 +285,42 @@ angular.module('recipes.services', [])
                   }
               }
               return arr;
+      },
+      objectEmpty: function(obj) {
+          if (obj == null) return true;
+          if (obj.length > 0)    return false;
+          if (obj.length === 0)  return true;
+          for (var key in obj) {
+              if (hasOwnProperty.call(obj, key)) return false;
+          }
+          return true;
       }
     }
 
   }])
 
-  .factory('tabRecognitionFactory', ['$ionicTabsDelegate', function($ionicTabsDelegate) {
-    var tabIndex = $ionicTabsDelegate.selectedIndex();
-    var tabName = function() {
+  .factory('tabRecognitionFactory', [function() {
+    
+    var tabName = function(tabIndex) {
       if (tabIndex === 0) {
           return 'home';
       } else if (tabIndex === 1) {
           return 'addNew';
       } else if (tabIndex === 2) {
           return 'activity';
-      } else if (tabIndex === 3) {
+      } else {
           return 'profile';
       }
-      return '';
     };
     return {
-      tab: tabName()
+      tab: function(tabIndex) {
+        return tabName(tabIndex);
+      }
     }
 
   }])
+
+  
 
 
 

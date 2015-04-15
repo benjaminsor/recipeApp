@@ -1,157 +1,133 @@
 <ion-view title="Add New Recipe" class="add-new">
 	<ion-nav-bar class="bar-balanced">
 	  <ion-nav-back-button class="button-clear">
-	    <i class="ion-close"></i> Cancel
+	    <i class="ion-close"></i>
 	  </ion-nav-back-button>
 	</ion-nav-bar>
-	<form>
-		<ion-slide-box class="add-new-website">
+	<ion-slide-box class="add-new-website" delegate-handle="manual" ng-init="disableSwipe()">
+		
+		<ion-slide class="edit-name">
+			<div class="slide-inner">
+				<h5>Recipe Name:</h5>
+			   	<input type="text" placeholder="" ng-model="formData.name">
+		   	</div>
+		</ion-slide>
 			
-			<ion-slide class="edit-name">
-				<div class="slide-inner">
-					<h5>Recipe Name:</h5>
-				   	<input type="text" placeholder="" ng-model="formData.name">
-				   	<div class="row">
-				   		<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="nextSlide()">Next</a>
-				   	</div>
-			   	</div>
-			</ion-slide>
-				
-			<ion-slide class="select-image">
-				<div class="slide-inner">
-				   	<h5>Choose an image:</h5>
-				   	<ul class="choose-image">
-				   		<li activate>
-				   			<a ng-click="takePic()"><p><i class="icon ion-camera"></i></p></a>
-				   		</li>
-				   		<li activate>
-				   			<a><p><i class="icon ion-images"></i></p></a>
-				   		</li>
-				   		<li activate ng-click="nextSlide()">
-				   			<span class="helper"></span>
-				   			<img src="img/appBack1.jpg">
-				   		</li>
+		<ion-slide class="select-image">
+			<div class="slide-inner">
+			   	<h5>Choose an image:</h5>
+			   	<ul class="choose-image">
+			   		<li activate>
+			   			<span class="helper"></span>
+			   			<img src="img/appBack1.jpg">
+			   		</li>
 
-				   		<li ng-if="imgUrl" activate ng-click="nextSlide()">
-				   			<span class="helper"></span>
-				   			<img src="https://recipe-service.herokuapp.com/images/{{imgUrl}}">
-				   		</li>
-				   	</ul>
-			   	   	<div class="row">
-			   		   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-			   		   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="nextSlide()">Next</a>
-			   	   	</div>
+			   		<li ng-show="imageLoading" activate>
+			   			<span class="helper"></span>
+			   			<ion-spinner ng-show="!imgUrl" class="spinner-balanced" icon="android"></ion-spinner>
+			   			<img ng-show="imgUrl" src="https://recipe-service.herokuapp.com/images/{{imgUrl}}">
+			   		</li>
+			   	</ul>
+			   	<div class="row">
+			   		<div class="col">
+			   			<a class="button button-balanced button-outline button-block" ng-click="takeMainPic()"><i class="icon ion-camera"></i></a>
+			   		</div>
+			   		<div class="col">
+			   			<a class="button button-balanced button-outline button-block" ng-click="getMainPic()"><i class="icon ion-images"></i></a>
+			   		</div>
 			   	</div>
-			</ion-slide>
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="edit-ingredients">
-				<div class="slide-inner">
-					<h5>Ingredients:</h5>
-					<div ng-repeat="ing in scrapedData.ingredients track by $index">
-						<a class="remove-ing button button-small button-ouline button-balanced" ng-click="removeIng(ing)"><i class="icon ion-android-close"></i></a>
-				   		<input type="text" placeholder="Ingredient" ng-model="ing"  value="{{ing}}">
-				   	</div>
-				   	<h5>Add:</h5>
-			   		<div class="ingAdder">
-			   			<a class="add-ing button button-small button-ouline button-balanced" ng-click="addIng(ing)"><i class="icon ion-plus"></i></a>
-			   	   		<input type="text" placeholder="Ingredient" ng-model="scrapedData.newIngredient">
-			   	   	</div>
-			   	   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="ingredientDone()">Next</a>
-				   	</div>
+		<ion-slide class="edit-ingredients">
+			<div class="slide-inner">
+				<h5>Ingredients:</h5>
+				<div ng-repeat="ing in scrapedData.ingredients track by $index">
+					<a class="remove-ing button button-small button-ouline button-balanced" ng-click="removeIng(ing)"><i class="icon ion-android-close"></i></a>
+			   		<input type="text" placeholder="Ingredient" ng-model="ing"  value="{{ing}}">
 			   	</div>
-			</ion-slide>
+			   	<h5>Add:</h5>
+		   		<div class="ingAdder">
+		   			<a class="add-ing button button-small button-ouline button-balanced" ng-click="addIng(ing)"><i class="icon ion-plus"></i></a>
+		   	   		<input type="text" placeholder="Ingredient" ng-model="scrapedData.newIngredient">
+		   	   	</div>
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="edit-directions">
-				<div class="slide-inner">
-					<h5>Add Directions:</h5>
-					<div ng-repeat="dir in scrapedData.directions track by $index">
-						<a class="remove-dir" ng-click="removeDir(dir)"><i class="icon ion-android-close"></i></a>
-				   		<textarea placeholder="Direction" ng-model="dir"  value="{{dir}}"> </textarea>
-				   	</div>
-			   		<div class="dirAdder">
-			   			<a class="add-dir" ng-click="addDir(dir)"><i class="icon ion-plus"></i></a>
-			   	   		<textarea type="text" placeholder="Direction" ng-model="scrapedData.newDirection"> </textarea>
-			   	   	</div>
-			   	   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="directionDone()">Next</a>
-				   	</div>
+		<ion-slide class="edit-directions">
+			<div class="slide-inner">
+				<h5>Add Directions:</h5>
+				<div ng-repeat="dir in scrapedData.directions track by $index">
+					<a class="remove-dir" ng-click="removeDir(dir)"><i class="icon ion-android-close"></i></a>
+			   		<textarea placeholder="Direction" ng-model="dir"  value="{{dir}}"> </textarea>
 			   	</div>
-			</ion-slide>
+		   		<div class="dirAdder">
+		   			<a class="add-dir" ng-click="addDir(dir)"><i class="icon ion-plus"></i></a>
+		   	   		<textarea type="text" placeholder="Direction" ng-model="scrapedData.newDirection"> </textarea>
+		   	   	</div>
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="choose-category">
-				<div class="slide-inner">
-					<h5>Select Category:</h5>
-				   	<ion-radio ng-model="formData.category" value="Appetizer">Appetizer</ion-radio>
-				   	<ion-radio ng-model="formData.category" value="Side">Side</ion-radio>
-				   	<ion-radio ng-model="formData.category" value="Entree">Entreé</ion-radio>
-				   	<ion-radio ng-model="formData.category" value="Snack">Snack</ion-radio>
-				   	<ion-radio ng-model="formData.category" value="Dessert">Dessert</ion-radio>
-				   	<ion-radio ng-model="formData.category" value="Drink">Drink</ion-radio>
-				   	<ion-radio ng-model="formData.category" value="Other">Other</ion-radio>
-				   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="nextSlide()">Next</a>
-				   	</div>
-			   	</div>
-			</ion-slide>
+		<ion-slide class="choose-category">
+			<div class="slide-inner">
+				<h5>Select Category:</h5>
+			   	<ion-radio ng-model="formData.category" value="Appetizer">Appetizer</ion-radio>
+			   	<ion-radio ng-model="formData.category" value="Side">Side</ion-radio>
+			   	<ion-radio ng-model="formData.category" value="Entree">Entreé</ion-radio>
+			   	<ion-radio ng-model="formData.category" value="Snack">Snack</ion-radio>
+			   	<ion-radio ng-model="formData.category" value="Dessert">Dessert</ion-radio>
+			   	<ion-radio ng-model="formData.category" value="Drink">Drink</ion-radio>
+			   	<ion-radio ng-model="formData.category" value="Other">Other</ion-radio>
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="choose-meal">
-				<div class="slide-inner">
-					<h5>Select Meal:</h5>
-				   	<ion-radio ng-model="formData.meal" value="Breakfast">Breakfast</ion-radio>
-				   	<ion-radio ng-model="formData.meal" value="Lunch">Lunch</ion-radio>
-				   	<ion-radio ng-model="formData.meal" value="Dinner">Dinner</ion-radio>
-				   	<ion-radio ng-model="formData.meal" value="Dessert">Dessert</ion-radio>
-				   	<ion-radio ng-model="formData.meal" value="Other">Other</ion-radio>
-				   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="nextSlide()">Next</a>
-				   	</div>
-			   	</div>
-			</ion-slide>
+		<ion-slide class="choose-meal">
+			<div class="slide-inner">
+				<h5>Select Meal:</h5>
+			   	<ion-radio ng-model="formData.meal" value="Breakfast">Breakfast</ion-radio>
+			   	<ion-radio ng-model="formData.meal" value="Lunch">Lunch</ion-radio>
+			   	<ion-radio ng-model="formData.meal" value="Dinner">Dinner</ion-radio>
+			   	<ion-radio ng-model="formData.meal" value="Dessert">Dessert</ion-radio>
+			   	<ion-radio ng-model="formData.meal" value="Other">Other</ion-radio>
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="choose-ethnicity">
-				<div class="slide-inner">
-					<h5>Select Ethnicity: <small>(optional)</small></h5>
-				   	<ion-radio ng-model="formData.ethnicity" value="Mexican">Mexican</ion-radio>
-				   	<ion-radio ng-model="formData.ethnicity" value="American">American</ion-radio>
-				   	<ion-radio ng-model="formData.ethnicity" value="Italian">Italian</ion-radio>
-				   	<ion-radio ng-model="formData.ethnicity" value="Chinese">Chinese</ion-radio>
-				   	<ion-radio ng-model="formData.ethnicity" value="Japanese">Japanese</ion-radio>
-				   	<ion-radio ng-model="formData.ethnicity" value="Thai">Thai</ion-radio>
-				   	<input type="text" placeholder="Other" ng-model="formData.ethnicity">
-				   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="nextSlide()">Next</a>
-				   	</div>
-			   	</div>
-			</ion-slide>
+		<ion-slide class="choose-ethnicity">
+			<div class="slide-inner">
+				<h5>Select Ethnicity: <small>(optional)</small></h5>
+			   	<ion-radio ng-model="formData.ethnicity" value="Mexican">Mexican</ion-radio>
+			   	<ion-radio ng-model="formData.ethnicity" value="American">American</ion-radio>
+			   	<ion-radio ng-model="formData.ethnicity" value="Italian">Italian</ion-radio>
+			   	<ion-radio ng-model="formData.ethnicity" value="Chinese">Chinese</ion-radio>
+			   	<ion-radio ng-model="formData.ethnicity" value="Japanese">Japanese</ion-radio>
+			   	<ion-radio ng-model="formData.ethnicity" value="Thai">Thai</ion-radio>
+			   	<input type="text" placeholder="Other" ng-model="formData.ethnicity">
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="add-tags">
-				<div class="slide-inner">
-					<h5>Additional Tags: <small>(comma separated)</small></h5>
-				   	<input type="text" placeholder="Tags" ng-model="recipe.tags">
-				   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button icon-right ion-arrow-right-c button-balanced button-clear button-block" ng-click="nextSlide()">Next</a>
-				   	</div>
-			   	</div>
-			</ion-slide>
+		<ion-slide class="add-tags">
+			<div class="slide-inner">
+				<h5>Additional Tags: <small>(comma separated)</small></h5>
+			   	<input type="text" placeholder="Tags" ng-model="recipe.tags">
+		   	</div>
+		</ion-slide>
 
-			<ion-slide class="add-notes">
-				<div class="slide-inner">
-					<h5>Notes:</h5>
-				   	<textarea placeholder="Add Notes" ng-model="formData.notes"></textarea>
-				   	<div class="row">
-					   	<a class="prev button icon-left ion-arrow-left-c button-balanced button-clear button-block" ng-click="prevSlide()">Back</a>
-					   	<a class="next button button-balanced button-clear button-block" ng-click="postRecipe()">Finish</a>
-				   	</div>
-			   	</div>
-			</ion-slide>
+		<ion-slide class="add-notes">
+			<div class="slide-inner">
+				<h5>Notes:</h5>
+			   	<textarea placeholder="Add Notes" ng-model="formData.notes"></textarea>
+		   	</div>
+		</ion-slide>
 
-		</ion-slide-box>
-	</form>
+	</ion-slide-box>
+   	<div class="row controls">
+   		<div class="col">
+	   		<a class="prev button icon-left ion-arrow-left-c button-light button-clear button-block" ng-click="prevSlide()">Back</a>
+	   	</div>
+	   	<div class="col"></div>
+	   	<div class="col"></div>
+	   	<div class="col">
+	   		<a class="next button icon-right ion-arrow-right-c button-light button-clear button-block" ng-click="nextSlide()">Next</a>
+	   	</div>
+   	</div>
 </ion-view>

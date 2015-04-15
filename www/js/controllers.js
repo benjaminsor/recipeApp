@@ -28,7 +28,7 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('HomeCtrl', function($scope, feedFactory, authFactory, $ionicPopup, arrayFactory, userFactory, tabRecognitionFactory) {
+    .controller('HomeCtrl', function($scope, feedFactory, authFactory, $ionicPopup, arrayFactory, userFactory, tabRecognitionFactory, $ionicTabsDelegate) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.feed = {};
 
@@ -46,7 +46,8 @@ angular.module('recipes.controllers', [])
             authFactory.logOut();
         }
 
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
         $scope.doRefresh = function() {
             getFeed($scope.user.username);
@@ -115,7 +116,7 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory, $location) {
+    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory, $ionicTabsDelegate, $location) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipe = recipe.data;
         $scope.myBookAdd = true;
@@ -135,11 +136,11 @@ angular.module('recipes.controllers', [])
             $scope.source = recipe.data.source.split('//')[1].split('.com')[0] + '.com';
         }
         
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
         angular.forEach($scope.user.myBook, function(value) {
             if (value.r_id === recipe.data._id) {
-                $scope.myBookAdd = false;
                 $scope.userNotes = value.userNotes;
             } 
         });
@@ -164,14 +165,14 @@ angular.module('recipes.controllers', [])
                 $scope.forkAd = false;
             }  
 
-            for(var i = 0; i < $scope.user.myBook.length; i++) {
-                if($scope.user.myBook[i].r_id === $scope.recipe._id) {
+            $scope.user.myBook.map(function(item) {
+                if(item.r_id === $scope.recipe._id) {
                     $scope.bookAd = true;
                     $scope.forkAd = false;
                 } else {
                     $scope.bookAd = false;
                 }
-            }
+            })
         };
 
         checkListStatus();
@@ -381,7 +382,7 @@ angular.module('recipes.controllers', [])
              
     })
 
-    .controller('activityCtrl', function($scope, authFactory, feedFactory, tabRecognitionFactory) {
+    .controller('activityCtrl', function($scope, authFactory, feedFactory, tabRecognitionFactory, $ionicTabsDelegate) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.feed = {};
 
@@ -389,11 +390,12 @@ angular.module('recipes.controllers', [])
             $scope.activity = data;
         });
 
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
     })
 
-    .controller('userCtrl', function($scope, authFactory, $ionicPopover, $sce, tabRecognitionFactory, user, userFactory, arrayFactory, feedFactory) {
+    .controller('userCtrl', function($scope, authFactory, $ionicPopover, $sce, tabRecognitionFactory, $ionicTabsDelegate, user, userFactory, arrayFactory, feedFactory) {
         $scope.user = user;
         var loggedInUser = authFactory.User.a || authFactory.User.b;
 
@@ -416,7 +418,8 @@ angular.module('recipes.controllers', [])
             $scope.user.image = $sce.trustAsHtml('<i class="icon ion-ios-person"></i>');
         }
 
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
         $scope.follow = function() {
             loggedInUser.following.push($scope.user.username);
@@ -467,11 +470,12 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('recipeBookCtrl', function($scope, authFactory, rbRecipes, tabRecognitionFactory) {
+    .controller('recipeBookCtrl', function($scope, authFactory, rbRecipes, tabRecognitionFactory, $ionicTabsDelegate) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipes = rbRecipes.data;
 
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
         $scope.userNotes = '';
         var allRecipes = $scope.recipes;
@@ -486,15 +490,16 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('forkListCtrl', function($scope, authFactory, forkRecipes, tabRecognitionFactory) {
+    .controller('forkListCtrl', function($scope, authFactory, forkRecipes, tabRecognitionFactory, $ionicTabsDelegate) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipes = forkRecipes.data;
 
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
     })
 
-    .controller('searchCtrl', function($scope, recipeFactory, tabRecognitionFactory, recipes, userFactory, $sce, authFactory, arrayFactory) {
+    .controller('searchCtrl', function($scope, recipeFactory, tabRecognitionFactory, $ionicTabsDelegate, recipes, userFactory, $sce, authFactory, arrayFactory) {
         var loggedInUser = authFactory.User.b;
         $scope.searchItems = {};
         $scope.results;
@@ -502,7 +507,8 @@ angular.module('recipes.controllers', [])
         $scope.loaded = true;
         $scope.searchQuery = {};
         $scope.recipes = recipes;
-        $scope.tab = tabRecognitionFactory.tab;
+        var tabIndex = $ionicTabsDelegate.selectedIndex();
+        $scope.tab = tabRecognitionFactory.tab(tabIndex);
 
         $scope.$watch("recipes", function(newValue, oldValue) {
             console.log($scope.recipes);    
@@ -574,88 +580,170 @@ angular.module('recipes.controllers', [])
         };
         $scope.recipe = {};
 
+        $scope.disableSwipe = function() {
+            $ionicSlideBoxDelegate.enableSlide(false);
+        };
+
+
+        
+        
+        
+
         $scope.nextSlide = function() {
-            $ionicSlideBoxDelegate.next();
+            if ($ionicSlideBoxDelegate.$getByHandle()._instances[0].$$delegateHandle === 'maual') {
+                if ($ionicSlideBoxDelegate.currentIndex() === 2) {
+                    ingredientNext();
+                } else if ($ionicSlideBoxDelegate.currentIndex() === 3) {
+                    directionNext();
+                } else if ($ionicSlideBoxDelegate.currentIndex() === 8) {
+                   postRecipe();
+                } else {
+                    $ionicSlideBoxDelegate.next();
+                }
+            } else if ($ionicSlideBoxDelegate.$getByHandle()._instances[0].$$delegateHandle === 'website') {
+                if ($ionicSlideBoxDelegate.currentIndex() === 0) {
+                    urlNext();
+                } else if ($ionicSlideBoxDelegate.currentIndex() === 3) {
+                    ingredientNext();
+                } else if ($ionicSlideBoxDelegate.currentIndex() === 8) {
+                    postRecipe();
+                } else {
+                    $ionicSlideBoxDelegate.next();
+                }
+            } else {
+                $ionicSlideBoxDelegate.next();
+            }
         }
 
         $scope.prevSlide = function() {
             $ionicSlideBoxDelegate.previous();
         }
 
-        $scope.urlNext = function() {
+        var urlNext = function() {
             $ionicLoading.show({
-                template: 'Loading...'
+                template: 'Retrieving Recipe Data...'
             });
-            var encodedUrl = encodeURIComponent($scope.formData.source);
-            scrapeFactory.scrape(encodedUrl).success(function(data) {
-                $scope.scrapedData.images = data.images;
-                $scope.formData.name = data.name.replace(/\s+/g,' ').trim();
-                $scope.scrapedData.ingredients = data.ingredients;
-                $ionicLoading.hide();
-                $scope.nextSlide();
-            }).error(function(data){
-                console.log('Failed to scrape:' + $scope.formData.url, data);
-            });
+            if($scope.formData.source) {
+                var encodedUrl = encodeURIComponent($scope.formData.source);
+                scrapeFactory.scrape(encodedUrl).success(function(data) {
+                    if (!arrayFactory.objectEmpty(data)) {
+                        $scope.scrapedData.images = data.images;
+                        $scope.formData.name = data.name.replace(/\s+/g,' ').trim();
+                        $scope.scrapedData.ingredients = data.ingredients; 
+                        $ionicLoading.hide();
+                        $ionicSlideBoxDelegate.next();
+                    } else {
+                        $ionicLoading.show({
+                            template: 'Could Not Retrieve Recipe Data'
+                        });
+                        setTimeout(function() {
+                            $ionicLoading.hide();
+                            $ionicSlideBoxDelegate.next();
+                        }, 2000);
+                    }
+                }).error(function(data){
+                    console.log('Failed to scrape:' + $scope.formData.url, data);
+                });
+            } else {
+                $ionicLoading.show({
+                    template: 'You Must Enter a URL'
+                });
+                setTimeout(function() {
+                    $ionicLoading.hide();
+                }, 2000);
+                console.log('Empty URL!');
+            }
         }
 
         $scope.removeIng = function(ing) {
             arrayFactory.remove($scope.scrapedData.ingredients, ing);
+            $ionicSlideBoxDelegate.update();
         }
 
         $scope.addIng = function() {
             $scope.scrapedData.ingredients.push($scope.scrapedData.newIngredient);
             $scope.scrapedData.newIngredient = '';
+            $ionicSlideBoxDelegate.update();
         }
 
-        $scope.ingredientDone = function() {
+        var ingredientNext = function() {
             $scope.formData.ingredients = $scope.scrapedData.ingredients;
-            $scope.nextSlide();
+            $ionicSlideBoxDelegate.next();
         }
 
         $scope.skipIng = function() {
             $scope.formData.ingredients = [];
-            $scope.nextSlide();
+            $ionicSlideBoxDelegate.next();
         }
 
         $scope.removeDir = function(dir) {
             arrayFactory.remove($scope.scrapedData.directions, dir);
+            $ionicSlideBoxDelegate.update();
         }
 
         $scope.addDir = function(dir) {
             $scope.scrapedData.directions.push($scope.scrapedData.newDirection);
             $scope.scrapedData.newDirection = '';
+            $ionicSlideBoxDelegate.update();
         }
 
-        $scope.directionDone = function() {
+        var directionNext = function() {
             $scope.formData.directions = $scope.scrapedData.directions;
-            $scope.nextSlide();
+            $ionicSlideBoxDelegate.next();
         }
 
-        $scope.takePic = function() {
-            
+        $scope.getMainPic = function() {
+            $scope.imgUrl = '';
+            $scope.imageLoading = true;
+            navigator.camera.getPicture(
+                upload,
+                function(message) {
+                    alert('Failed to connect to camera!');
+                },
+                {
+                    sourceType : Camera.PictureSourceType.PHOTOLIBRARY
+                }
+            );
+            function upload(imageURI) {
+                var baseUrl = 'https://recipe-service.herokuapp.com/api/';
+                var ft = new FileTransfer();
+                ft.upload(imageURI, encodeURI(baseUrl + 'file/upload'), win, fail);
+            };
+            function win(r) {
+                console.log(r.response);
+                $scope.imgUrl = r.response;
+                $ionicSlideBoxDelegate.update();
+            };
+            function fail(error) {
+                console.log(error.source);
+            }; 
+        }
+
+        $scope.takeMainPic = function() {
+            $scope.imgUrl = '';
+            $scope.imageLoading = true;
             navigator.camera.getPicture(
                 upload,
                 function(message) {
                     alert('Failed to connect to camera!');
                 }
             );
-
             function upload(imageURI) {
                 var baseUrl = 'https://recipe-service.herokuapp.com/api/';
                 var ft = new FileTransfer();
                 ft.upload(imageURI, encodeURI(baseUrl + 'file/upload'), win, fail);
             };
-
             function win(r) {
                 console.log(r.response);
+                $scope.imgUrl = r.response;
+                $ionicSlideBoxDelegate.update();
             };
-
             function fail(error) {
                 console.log(error.source);
             };
         };
 
-        $scope.postRecipe = function() {
+        var postRecipe = function() {
             if($scope.recipe.tags) {
                 var tagArray = $scope.recipe.tags.split(',');
                 $scope.formData.tags = tagArray;
