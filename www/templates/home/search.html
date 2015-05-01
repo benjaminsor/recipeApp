@@ -3,19 +3,21 @@
 
   	<ion-content class="search">
 
-	  	<label ng-if="recipes" class="item item-input">
-	    	<i class="icon ion-search placeholder-icon"></i>
-			<input type="text" class="form-control" placeholder="Search Recipes" ng-model="searchQuery.recipes" ng-keyup="searchRecipes()">
-		</label>
-	  	<label ng-if="!recipes" class="item item-input">
-	    	<i class="icon ion-search placeholder-icon"></i>
-			<input type="text" class="form-control" placeholder="Search People" ng-model="searchQuery.people" ng-keyup="searchPeople()">
-		</label>
+  		<div class="small-bar"></div>
 
 		<div class="button-bar">
 			<a href="#/tab/searchRecipes" ng-class="{active: recipes}" nav-transition="none" class="button button-balanced button-clear">Recipes</a>
 	      	<a href="#/tab/searchPeople" ng-class="{active: !recipes}" nav-transition="none" class="button button-balanced button-clear">People</a>	
 	    </div>
+
+      	<label ng-if="recipes" class="item item-input">
+        	<i class="icon ion-search placeholder-icon"></i>
+    		<input type="text" class="form-control" placeholder="Search Recipes" ng-model="searchQuery.recipes" ng-keyup="searchRecipes()">
+    	</label>
+      	<label ng-if="!recipes" class="item item-input">
+        	<i class="icon ion-search placeholder-icon"></i>
+    		<input type="text" class="form-control" placeholder="Search People" ng-model="searchQuery.people" ng-keyup="searchPeople()">
+    	</label>
 			
 		<div class="list">
 			

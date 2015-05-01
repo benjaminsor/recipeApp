@@ -4,6 +4,13 @@
 	color:#fff;
 }
 
+.button.source {
+	position:fixed;
+	bottom:39px;
+	line-height:20px;
+	padding:6px 12px;
+}
+
 .main-comments .recipe-header {
 	height:150px;
 }
@@ -154,4 +161,8 @@
 
 .comments .col-10 {
 	text-align:center;
+}
+
+.comment-section {
+	margin-bottom:90px;
 }

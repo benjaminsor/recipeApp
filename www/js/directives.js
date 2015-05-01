@@ -107,3 +107,13 @@ angular.module('recipes.directives', [])
 	}
 })
 
+.directive('slideHeight', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, elem, attr) {
+            var screenHeight = elem.parents('.add-new').height() - 70;
+            elem.css('height',screenHeight);
+        }
+    }
+})
+

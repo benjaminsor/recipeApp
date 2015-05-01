@@ -8,14 +8,15 @@ $light:                           #ffffff !default;
 $stable:                          #e0e0e0 !default;
 $positive:                        #387ef5 !default;
 $calm:                            #11c1f3 !default;
-/*$balanced:                        #5d9451 !default;*/
+$balanced:                        #5d9451 !default;
 $balanced:                        #7fb653 !default;
 $balanced:#65C6BB;
+$balanced:#de4805;
 /*$energized:                       #ffc900 !default;*/
 $energized:                       #e89902 !default;
 $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
-$dark:                            #444444 !default;
+$dark:                            #666666 !default;
 
 
 // The path for our ionicons font files, relative to the built CSS in www/css
@@ -45,6 +46,36 @@ a:hover {
 p {
 	margin:0;
 	line-height:100%;
+}
+
+.small-bar {
+	position:relative;
+	height:20px;
+	width:100%;
+	background:$balanced;
+}
+
+.bar.bar-balanced {
+	background:#fff;
+	color:$dark;
+	border-bottom:1px solid $stable;
+}
+
+.bar.bar-balanced .title, .bar.bar-balanced .button {
+	color:$balanced;
+}
+
+.button, .bar {
+	text-transform:uppercase;
+	font-size:94%;
+}
+
+.platform-android .bar .title, .bar .title, .bar-balanced .button.button-clear {
+	font-size:14px;
+}
+
+.bar .button.button-clear .icon:before, .bar .button.button-clear.icon:before, .bar .button.button-clear.icon-left:before, .bar .button.button-clear.icon-right:before {
+	font-size:20px;
 }
 
 .button-balanced.button-small.button-round {
@@ -104,8 +135,8 @@ h1,h2,h3,h4,h5,h6 {
 .tab-item.tab-item-active {
 	color:$balanced;
 	border-color:#ddd;
-	border-top: 1px solid !important;
-	margin-top:-2px;
+	border-top: 2px solid !important;
+	background:#e4e4e4;
 }
 
 .tabs-striped.tabs-light .tab-item {
@@ -238,6 +269,9 @@ h1,h2,h3,h4,h5,h6 {
 	opacity:1;
 }
 
+.tabs {
+  padding-top: 0px;
+}
 
 @import "login";
 @import "home";

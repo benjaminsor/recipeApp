@@ -116,7 +116,7 @@ angular.module('recipes.controllers', [])
 
     })
 
-    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory, $ionicTabsDelegate, $location) {
+    .controller('RecipeCtrl', function($scope, recipe, authFactory, userFactory, arrayFactory, $ionicPopup, recipeFactory, feedFactory, tabRecognitionFactory, $ionicTabsDelegate, $location, utilityFactory) {
         $scope.user = authFactory.User.a || authFactory.User.b;
         $scope.recipe = recipe.data;
         $scope.myBookAdd = true;
@@ -132,10 +132,10 @@ angular.module('recipes.controllers', [])
             doRefresh($scope.recipe._id);
         });
 
-        if(recipe.data.source) {
-            $scope.source = recipe.data.source.split('//')[1].split('.com')[0] + '.com';
+        if (recipe.data.source) {
+            $scope.source = utilityFactory.getFormattedUrl(recipe.data.source);
         }
-        
+                
         var tabIndex = $ionicTabsDelegate.selectedIndex();
         $scope.tab = tabRecognitionFactory.tab(tabIndex);
 

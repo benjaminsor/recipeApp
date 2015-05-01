@@ -320,6 +320,28 @@ angular.module('recipes.services', [])
 
   }])
 
+  .factory('utilityFactory', [function(){
+    return {
+      getFormattedUrl: function(source) {
+        var first = source.split('//')[1];
+        if(first.indexOf('www.') > -1) {
+            var second = first.split('www.')[1];
+        } else {
+            var second = first;
+        }
+        if (second.indexOf('.com') > -1) {
+            var third = second.split('.com')[0];
+        } else if (second.indexOf('.net') > -1) {
+            var third = second.split('.net')[0];
+        } else if (second.indexOf('.org') > -1) {
+            var third = second.split('.org')[0]
+        } else {
+            var third = second;
+        }
+        return third
+      }
+    }
+  }])
   
 
 

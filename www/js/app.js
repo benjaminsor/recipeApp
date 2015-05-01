@@ -16,8 +16,18 @@ angular.module('recipes', ['ionic', 'recipes.controllers', 'recipes.services', '
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider) {
 
+  
   $ionicConfigProvider.views.transition('android');
   $ionicConfigProvider.tabs.position('bottom');
+  $ionicConfigProvider.navBar.alignTitle('center');
+  $ionicConfigProvider.backButton.icon('ion-android-arrow-back');
+  $ionicConfigProvider.backButton.text('');
+  $ionicConfigProvider.backButton.previousTitleText(false);
+  $ionicConfigProvider.tabs.style('standard');
+  $ionicConfigProvider.templates.maxPrefetch(0);
+  $ionicConfigProvider.navBar.positionPrimaryButtons('left');
+  $ionicConfigProvider.navBar.positionSecondaryButtons('right');
+  
 
   $httpProvider.defaults.withCredentials = true;
 
